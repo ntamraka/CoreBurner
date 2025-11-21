@@ -1,0 +1,418 @@
+# coreburner log
+# mode=multi
+# workload=INT
+# util=50.0
+# threads=2
+# interv
+=== time: 1s elapsed (3s remaining) ===
+ core  0 :  50.00%  freq=1800172 kHz
+ core  1 :  50.00%  freq=1800161 kHz
+ core  2 :   0.00%  freq=1500000 kHz
+ core  3 :   0.00%  freq=1500000 kHz
+ core  4 :   2.00%  freq=1500120 kHz
+ core  5 :   0.00%  freq=1500000 kHz
+ core  6 :   0.00%  freq=1500000 kHz
+ core  7 :   0.00%  freq=1500000 kHz
+ core  8 :   0.00%  freq=1500000 kHz
+ core  9 :   0.00%  freq=1500000 kHz
+ core 10 :   0.00%  freq=1500000 kHz
+ core 11 :   0.00%  freq=1500000 kHz
+ core 12 :   0.00%  freq=1500000 kHz
+ core 13 :   0.00%  freq=1500000 kHz
+ core 14 :   0.00%  freq=1500000 kHz
+ core 15 :   0.00%  freq=1500000 kHz
+ core 16 :   0.00%  freq=1500000 kHz
+ core 17 :   0.00%  freq=1500000 kHz
+ core 18 :   0.00%  freq=1500000 kHz
+ core 19 :   0.00%  freq=1500000 kHz
+ core 20 :   0.00%  freq=1500000 kHz
+ core 21 :   0.00%  freq=1500000 kHz
+ core 22 :   0.00%  freq=1500000 kHz
+ core 23 :   0.00%  freq=1500000 kHz
+ core 24 :   0.00%  freq=1500000 kHz
+ core 25 :   0.00%  freq=1500000 kHz
+ core 26 :   0.00%  freq=1500000 kHz
+ core 27 :   0.00%  freq=1500000 kHz
+ core 28 :   0.00%  freq=1500000 kHz
+ core 29 :   0.00%  freq=1500000 kHz
+ core 30 :   0.00%  freq=1500000 kHz
+ core 31 :   0.00%  freq=1500000 kHz
+ core 32 :   0.00%  freq=1500000 kHz
+ core 33 :   0.00%  freq=1500000 kHz
+ core 34 :   0.00%  freq=1500000 kHz
+ core 35 :   0.00%  freq=1500000 kHz
+ core 36 :   0.00%  freq=1500000 kHz
+ core 37 :   0.00%  freq=1500000 kHz
+ core 38 :   0.00%  freq=1500000 kHz
+ core 39 :   0.00%  freq=1500000 kHz
+ core 40 :   0.00%  freq=1500000 kHz
+ core 41 :   0.00%  freq=1500000 kHz
+ core 42 :   0.00%  freq=1500000 kHz
+ core 43 :   0.00%  freq=1500000 kHz
+ core 44 :   0.00%  freq=1500000 kHz
+ core 45 :   0.00%  freq=1500000 kHz
+ core 46 :   0.00%  freq=1500000 kHz
+ core 47 :   0.00%  freq=1500000 kHz
+ core 48 :   0.00%  freq=1500000 kHz
+ core 49 :   0.00%  freq=1500000 kHz
+ core 50 :   0.00%  freq=1500000 kHz
+ core 51 :   0.00%  freq=1500000 kHz
+ core 52 :   0.00%  freq=1500000 kHz
+ core 53 :   0.00%  freq=1500000 kHz
+ core 54 :   0.00%  freq=1500000 kHz
+ core 55 :   0.00%  freq=1500000 kHz
+ core 56 :   0.00%  freq=1500000 kHz
+ core 57 :   0.00%  freq=1500000 kHz
+ core 58 :   0.00%  freq=1500000 kHz
+ core 59 :   0.00%  freq=1500000 kHz
+ core 60 :   0.00%  freq=1500000 kHz
+ core 61 :   0.00%  freq=1500000 kHz
+ core 62 :   0.00%  freq=1500000 kHz
+ core 63 :   1.00%  freq=1500000 kHz
+ cores 64.1763747152,2,41.00,50.51,1800157,50.50,1800146,0.00,1500000,0.00,1500000,2.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1488852,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.99,1500000,0.03,1500000,665844,666152
+1763747153,3,41.00,50.00,1800189,50.00,1800226,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500.00%  freq=1500000 kHz
+ core 40 :   0.00%  freq=1500000 kHz
+ core 41 :   0.00%  fre1763747154,4,41.00,50.50,1800132,50.00,1800192,0.00,1500000,0.00,1500000,4.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.00,1500000,0.03,1498566,665256,665851
+
+ CPU temp : 41.00 °C
+ thread  0 pinned->cpu 0 : ops_total=1334008 target=50.0%
+ thread  1 pinned->cpu 1 : ops_total=1334836 target=50.0%
+
+=== time: 3s elapsed (1s remaining) ===
+ core  0 :  50.00%  freq=1800189 kHz
+ core  1 :  50.00%  freq=1800226 kHz
+ core  2 :   0.00%  freq=1500000 kHz
+ core  3 :   0.00%  freq=1500000 kHz
+ core  4 :   0.00%  freq=1500000 kHz
+ core  5 :   0.00%  freq=1500000 kHz
+ core  6 :   0.00%  freq=1500000 kHz
+ core  7 :   0.00%  freq=1500000 kHz
+ core  8 :   0.00%  freq=1500000 kHz
+ core  9 :   0.00%  freq=1500000 kHz
+ core 10 :   0.00%  freq=1500000 kHz
+ core 11 :   0.00%  freq=1500000 kHz
+ core 12 :   0.00%  freq=1500000 kHz
+ core 13 :   0.00%  freq=1500000 kHz
+ core 14 :   0.00%  freq=1500000 kHz
+ core 15 :   0.00%  freq=1500000 kHz
+ core 16 :   0.00%  freq=1500000 kHz
+ core 17 :   0.00%  freq=1500000 kHz
+ core 18 :   0.00%  freq=1500000 kHz
+ core 19 :   0.00%  freq=1500000 kHz
+ core 20 :   0.00%  freq=1500000 kHz
+ core 21 :   0.00%  freq=1500000 kHz
+ core 22 :   0.00%  freq=1500000 kHz
+ core 23 :   0.00%  freq=1500000 kHz
+ core 24 :   0.00%  freq=1500000 kHz
+ core 25 :   0.00%  freq=1500000 kHz
+ core 26 :   0.00%  freq=1500000 kHz
+ core 27 :   0.00%  freq=1500000 kHz
+ core 28 :   0.00%  freq=1500000 kHz
+ core 29 :   0.00%  freq=1500000 kHz
+ core 30 :   0.00%  freq=1500000 kHz
+ core 31 :   0.00%  freq=1500000 kHz
+ core 32 :   0.00%  freq=1500000 kHz
+ core 33 :   0.00%  freq=1500000 kHz
+ core 34 :   0.00%  freq=1500000 kHz
+ core 35 :   0.00%  freq=1500000 kHz
+ core 36 :   0.00%  freq=1500000 kHz
+ core 37 :   0.00%  freq=1500000 kHz
+ core 38 :   0.00%  freq=1500000 kHz
+ core 39 :   0.00%  freq=1500000 kHz
+ core 40 :   0.00%  freq=1500000 kHz
+ core 41 :   0.00%  freq=1500000 kHz
+ core 42 :   0.00%  freq=1500000 kHz
+ core 43 :   0.00%  freq=1500000 kHz
+ core 44 :   0.00%  freq=1500000 kHz
+ core 45 :   0.00%  freq=1500000 kHz
+ core 46 :   0.00%  freq=1500000 kHz
+ core 47 :   0.00%  freq=1500000 kHz
+ core 48 :   0.00%  freq=1500000 kHz
+ core 49 :   0.00%  freq=1500000 kHz
+ core 50 :   0.00%  freq=1500000 kHz
+ core 51 :   0.00%  freq=1500000 kHz
+ core 52 :   0.00%  freq=1500000 kHz
+ core 53 :   0.00%  freq=1500000 kHz
+ core 54 :   0.00%  freq=1500000 kHz
+ core 55 :   0.00%  freq=1500000 kHz
+ core 56 :   0.00%  freq=1500000 kHz
+ core 57 :   0.00%  freq=1500000 kHz
+ core 58 :   0.00%  freq=1500000 kHz
+ core 59 :   0.00%  freq=1500000 kHz
+ core 60 :   0.00%  freq=1500000 kHz
+ core 61 :   0.00%  freq=1500000 kHz
+ core 62 :   0.00%  freq=1500000 kHz
+ core 63 :   1.00%  freq=1500000 kHz
+ cores 64..191 : avg_util=0.02% avg_freq=1500001 kHz
+ CPU temp : 41.00 °C
+ thread  0 pinned->cpu 0 : ops_total=1999398 target=50.0%
+ thread  1 pinned->cpu 1 : ops_total=2000477 target=50.0%
+
+=== time: 4s elapsed (0s remaining) ===
+ core  0 :  50.50%  freq=1800132 kHz
+ core  1 :  50.00%  freq=1800192 kHz
+ core  2 :   0.00%  freq=1500000 kHz
+ core  3 :   0.00%  freq=1500000 kHz
+ core  4 :   4.00%  freq=1500000 kHz
+ core  5 :   0.00%  freq=1500000 kHz
+ core  6 :   0.00%  freq=1500000 kHz
+ core  7 :   0.00%  freq=1500000 kHz
+ core  8 :   0.00%  freq=1500000 kHz
+ core  9 :   0.00%  freq=1500000 kHz
+ core 10 :   0.00%  freq=1500000 kHz
+ core 11 :   0.00%  freq=1500000 kHz
+ core 12 :   0.00%  freq=1500000 kHz
+ core 13 :   0.00%  freq=1500000 kHz
+ core 14 :   0.00%  freq=1500000 kHz
+ core 15 :   0.00%  freq=1500000 kHz
+ core 16 :   0.00%  freq=1500000 kHz
+ core 17 :   0.00%  freq=1500000 kHz
+ core 18 :   0.00%  freq=1500000 kHz
+ core 19 :   0.00%  freq=1500000 kHz
+ core 20 :   0.00%  freq=1500000 kHz
+ core 21 :   0.00%  freq=1500000 kHz
+ core 22 :   0.00%  freq=1500000 kHz
+ core 23 :   0.00%  freq=1500000 kHz
+ core 24 :   0.00%  freq=1500000 kHz
+ core 25 :   0.00%  freq=1500000 kHz
+ core 26 :   0.00%  freq=1500000 kHz
+ core 27 :   0.00%  freq=1500000 kHz
+ core 28 :   0.00%  freq=1500000 kHz
+ core 29 :   0.00%  freq=1500000 kHz
+ core 30 :   0.00%  freq=1500000 kHz
+ core 31 :   0.00%  freq=1500000 kHz
+ core 32 :   0.00%  freq=1500000 kHz
+ core 33 :   0.00%  freq=1500000 kHz
+ core 34 :   0.00%  freq=1500000 kHz
+ core 35 :   0.00%  freq=1500000 kHz
+ core 36 :   0.00%  freq=1500000 kHz
+ core 37 :   0.00%  freq=1500000 kHz
+ core 38 :   0.00%  freq=1500000 kHz
+ core 39 :   0.00%  freq=1500000 kHz
+ core 40 :   0.00%  freq=1500000 kHz
+ core 41 :   0.00%  freq=1500000 kHz
+ core 42 :   0.00%  freq=1500000 kHz
+ core 43 :   0.00%  freq=1500000 kHz
+ core 44 :   0.00%  freq=1500000 kHz
+ core 45 :   0.00%  freq=1500000 kHz
+ core 46 :   0.00%  freq=1500000 kHz
+ core 47 :   0.00%  freq=1500000 kHz
+ core 48 :   0.00%  freq=1500000 kHz
+ core 49 :   0.00%  freq=1500000 kHz
+ core 50 :   0.00%  freq=1500000 kHz
+ core 51 :   0.00%  freq=1500000 kHz
+ core 52 :   0.00%  freq=1500000 kHz
+ core 53 :   0.00%  freq=1500000 kHz
+ core 54 :   0.00%  freq=1500000 kHz
+ core 55 :   0.00%  freq=1500000 kHz
+ core 56 :   0.00%  freq=1500000 kHz
+ core 57 :   0.00%  freq=1500000 kHz
+ core 58 :   0.00%  freq=1500000 kHz
+ core 59 :   0.00%  freq=1500000 kHz
+ core 60 :   0.00%  freq=1500000 kHz
+ core 61 :   0.00%  freq=1500000 kHz
+ core 62 :   0.00%  freq=1500000 kHz
+ core 63 :   0.00%  freq=1500000 kHz
+ cores 64..191 : avg_util=0.03% avg_freq=1498566 kHz
+ CPU temp : 41.00 °C
+ thread  0 pinned->cpu 0 : ops_total=2664671 target=50.0%
+ thread  1 pinned->cpu 1 : ops_total=2666344 target=50.0%
+
+=== SUMMARY ===
+ core  0 : last_total=4248526 last_idle=4175002
+ core  1 : last_total=4262999 last_idle=4202121
+ core  2 : last_total=4263478 last_idle=4217917
+ core  3 : last_total=4264148 last_idle=4222801
+ core  4 : last_total=4264059 last_idle=4214277
+ core  5 : last_total=4264212 last_idle=4222304
+ core  6 : last_total=4264609 last_idle=4223275
+ core  7 : last_total=4264266 last_idle=4221950
+ core  8 : last_total=4263205 last_idle=4213743
+ core  9 : last_total=4264195 last_idle=4220044
+ core 10 : last_total=4264294 last_idle=4229157
+ core 11 : last_total=4264344 last_idle=4228572
+ core 12 : last_total=4264244 last_idle=4228645
+ core 13 : last_total=4264546 last_idle=4229466
+ core 14 : last_total=4264382 last_idle=4229231
+ core 15 : last_total=4264250 last_idle=4228177
+ core 16 : last_total=4264384 last_idle=4228853
+ core 17 : last_total=4264532 last_idle=4229296
+ core 18 : last_total=4263416 last_idle=4228117
+ core 19 : last_total=4264484 last_idle=4228703
+ core 20 : last_total=4264296 last_idle=4228878
+ core 21 : last_total=4264479 last_idle=4229335
+ core 22 : last_total=4264562 last_idle=4229471
+ core 23 : last_total=4264494 last_idle=4228785
+ core 24 : last_total=4264345 last_idle=4229018
+ core 25 : last_total=4264609 last_idle=4229632
+ core 26 : last_total=4264571 last_idle=4229759
+ core 27 : last_total=4264469 last_idle=4228689
+ core 28 : last_total=4264268 last_idle=4228992
+ core 29 : last_total=4264540 last_idle=4229520
+ core 30 : last_total=4264603 last_idle=4229707
+ core 31 : last_total=4264524 last_idle=4229130
+ core 32 : last_total=4263602 last_idle=4217235
+ core 33 : last_total=4264517 last_idle=4229613
+ core 34 : last_total=4264620 last_idle=4229945
+ core 35 : last_total=4264242 last_idle=4228771
+ core 36 : last_total=4264173 last_idle=4228969
+ core 37 : last_total=4264571 last_idle=4229817
+ core 38 : last_total=4263598 last_idle=4228458
+ core 39 : last_total=4264619 last_idle=4229786
+ core 40 : last_total=4264424 last_idle=4229119
+ core 41 : last_total=4264618 last_idle=4229659
+ core 42 : last_total=4264615 last_idle=4229729
+ core 43 : last_total=4264630 last_idle=4229796
+ core 44 : last_total=4264535 last_idle=4229624
+ core 45 : last_total=4264641 last_idle=4229906
+ core 46 : last_total=4264663 last_idle=4229976
+ core 47 : last_total=4264609 last_idle=4229618
+ core 48 : last_total=4264389 last_idle=4229151
+ core 49 : last_total=4264437 last_idle=4229684
+ core 50 : last_total=4264593 last_idle=4229923
+ core 51 : last_total=4264597 last_idle=4229614
+ core 52 : last_total=4264483 last_idle=4229427
+ core 53 : last_total=4264519 last_idle=4229729
+ core 54 : last_total=4264620 last_idle=4229806
+ core 55 : last_total=4264541 last_idle=4229259
+ core 56 : last_total=4264357 last_idle=4228035
+ core 57 : last_total=4264333 last_idle=4227464
+ core 58 : last_total=4264532 last_idle=4229727
+ core 59 : last_total=4264563 last_idle=4229440
+ core 60 : last_total=4264432 last_idle=4229251
+ core 61 : last_total=4264358 last_idle=4229591
+ core 62 : last_total=4264524 last_idle=4229554
+ core 63 : last_total=4264547 last_idle=4229527
+ core 64 : last_total=4246514 last_idle=4196157
+ core 65 : last_total=4261509 last_idle=4218840
+ core 66 : last_total=4262713 last_idle=4217225
+ core 67 : last_total=4262209 last_idle=4227002
+ core 68 : last_total=4263978 last_idle=4228223
+ core 69 : last_total=4261764 last_idle=4226391
+ core 70 : last_total=4263706 last_idle=4228588
+ core 71 : last_total=4264555 last_idle=4229559
+ core 72 : last_total=4264293 last_idle=4229179
+ core 73 : last_total=4264428 last_idle=4229357
+ core 74 : last_total=4264662 last_idle=4229929
+ core 75 : last_total=4264507 last_idle=4229053
+ core 76 : last_total=4264455 last_idle=4229048
+ core 77 : last_total=4264637 last_idle=4229769
+ core 78 : last_total=4264652 last_idle=4229839
+ core 79 : last_total=4264575 last_idle=4229243
+ core 80 : last_total=4263422 last_idle=4227910
+ core 81 : last_total=4264128 last_idle=4228744
+ core 82 : last_total=4264459 last_idle=4229504
+ core 83 : last_total=4264443 last_idle=4229603
+ core 84 : last_total=4264577 last_idle=4228637
+ core 85 : last_total=4264614 last_idle=4229808
+ core 86 : last_total=4264489 last_idle=4229257
+ core 87 : last_total=4264552 last_idle=4229489
+ core 88 : last_total=4264596 last_idle=4224001
+ core 89 : last_total=4264285 last_idle=4226081
+ core 90 : last_total=4263974 last_idle=4229300
+ core 91 : last_total=4264237 last_idle=4227707
+ core 92 : last_total=4264282 last_idle=4229283
+ core 93 : last_total=4264584 last_idle=4229649
+ core 94 : last_total=4264650 last_idle=4229909
+ core 95 : last_total=4264606 last_idle=4229626
+ core 96 : last_total=4264593 last_idle=4229644
+ core 97 : last_total=4264165 last_idle=4229288
+ core 98 : last_total=4264653 last_idle=4229934
+ core 99 : last_total=4264585 last_idle=4229490
+ core 100 : last_total=4264601 last_idle=4229720
+ core 101 : last_total=4264654 last_idle=4229696
+ core 102 : last_total=4264666 last_idle=4229987
+ core 103 : last_total=4264605 last_idle=4229472
+ core 104 : last_total=4264476 last_idle=4229701
+ core 105 : last_total=4264642 last_idle=4229987
+ core 106 : last_total=4264603 last_idle=4229902
+ core 107 : last_total=4263568 last_idle=4228632
+ core 108 : last_total=4264550 last_idle=4229805
+ core 109 : last_total=4264352 last_idle=4229621
+ core 110 : last_total=4264398 last_idle=4229749
+ core 111 : last_total=4264404 last_idle=4229251
+ core 112 : last_total=4264308 last_idle=4229233
+ core 113 : last_total=4264430 last_idle=4229281
+ core 114 : last_total=4264581 last_idle=4229912
+ core 115 : last_total=4264652 last_idle=4229962
+ core 116 : last_total=4264569 last_idle=4229602
+ core 117 : last_total=4264546 last_idle=4229757
+ core 118 : last_total=4264544 last_idle=4229360
+ core 119 : last_total=4264616 last_idle=4229738
+ core 120 : last_total=4264359 last_idle=4228444
+ core 121 : last_total=4264571 last_idle=4229565
+ core 122 : last_total=4264598 last_idle=4229817
+ core 123 : last_total=4264610 last_idle=4229068
+ core 124 : last_total=4264434 last_idle=4228905
+ core 125 : last_total=4264626 last_idle=4229637
+ core 126 : last_total=4264592 last_idle=4229660
+ core 127 : last_total=4264554 last_idle=4228950
+ core 128 : last_total=4263993 last_idle=4227645
+ core 129 : last_total=4264117 last_idle=4228461
+ core 130 : last_total=4264170 last_idle=4228479
+ core 131 : last_total=4264345 last_idle=4228893
+ core 132 : last_total=4263803 last_idle=4227827
+ core 133 : last_total=4264044 last_idle=4228680
+ core 134 : last_total=4264242 last_idle=4229023
+ core 135 : last_total=4264231 last_idle=4228977
+ core 136 : last_total=4264537 last_idle=4229282
+ core 137 : last_total=4264581 last_idle=4229542
+ core 138 : last_total=4264480 last_idle=4228989
+ core 139 : last_total=4264558 last_idle=4229407
+ core 140 : last_total=4264218 last_idle=4228178
+ core 141 : last_total=4264534 last_idle=4229286
+ core 142 : last_total=4264590 last_idle=4229617
+ core 143 : last_total=4264427 last_idle=4228897
+ core 144 : last_total=4264454 last_idle=4228852
+ core 145 : last_total=4264479 last_idle=4229231
+ core 146 : last_total=4264252 last_idle=4228557
+ core 147 : last_total=4264224 last_idle=4228260
+ core 148 : last_total=4264296 last_idle=4228449
+ core 149 : last_total=4264437 last_idle=4228945
+ core 150 : last_total=4264576 last_idle=4229535
+ core 151 : last_total=4264413 last_idle=4228374
+ core 152 : last_total=4264350 last_idle=4228424
+ core 153 : last_total=4264559 last_idle=4229459
+ core 154 : last_total=4264602 last_idle=4229764
+ core 155 : last_total=4264376 last_idle=4228547
+ core 156 : last_total=4264312 last_idle=4228440
+ core 157 : last_total=4264361 last_idle=4228806
+ core 158 : last_total=4264502 last_idle=4229506
+ core 159 : last_total=4264395 last_idle=4228550
+ core 160 : last_total=4263546 last_idle=4224198
+ core 161 : last_total=4264193 last_idle=4228779
+ core 162 : last_total=4264347 last_idle=4229353
+ core 163 : last_total=4264433 last_idle=4228791
+ core 164 : last_total=4264085 last_idle=4228399
+ core 165 : last_total=4264137 last_idle=4227153
+ core 166 : last_total=4263957 last_idle=4227909
+ core 167 : last_total=4263836 last_idle=4227476
+ core 168 : last_total=4264314 last_idle=4222816
+ core 169 : last_total=4264192 last_idle=4224713
+ core 170 : last_total=4264467 last_idle=4229373
+ core 171 : last_total=4264497 last_idle=4228489
+ core 172 : last_total=4263521 last_idle=4225472
+ core 173 : last_total=4263875 last_idle=4225499
+ core 174 : last_total=4264102 last_idle=4226126
+ core 175 : last_total=4263959 last_idle=4226144
+ core 176 : last_total=4264261 last_idle=4227840
+ core 177 : last_total=4264022 last_idle=4227315
+ core 178 : last_total=4264353 last_idle=4228678
+ core 179 : last_total=4264207 last_idle=4227591
+ core 180 : last_total=4264427 last_idle=4229047
+ core 181 : last_total=4264428 last_idle=4227901
+ core 182 : last_total=4264483 last_idle=4229107
+ core 183 : last_total=4264318 last_idle=4228608
+ core 184 : last_total=4264435 last_idle=4228881
+ core 185 : last_total=4264441 last_idle=4228903
+ core 186 : last_total=4264486 last_idle=4229209
+ core 187 : last_total=4264269 last_idle=4228373
+ core 188 : last_total=4264469 last_idle=4228403
+ core 189 : last_total=4264525 last_idle=4229607
+ core 190 : last_total=4264460 last_idle=4229110
+ core 191 : last_total=4264294 last_idle=4228422
+ Final CPU temp: 41.00 C
+ Threads: 2  Duration requested: 4 s  Time elapsed: 5s
+ thread  0 pinned->cpu 0 : total ops=2664707
+ thread  1 pinned->cpu 1 : total ops=2666378
+Summary written to test_results/max_threads_clamp.csv.summary.txt

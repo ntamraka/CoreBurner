@@ -1,0 +1,10 @@
+✔ CHECK MODE: configuration validated.
+
+Planned configuration:
+  Mode            : wrong
+  Threads         : 192
+  Workload        : INT
+  Utilization     : 50.0%
+  Duration        : 1 s
+
+✔ No workload executed (because --check).

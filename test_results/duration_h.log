@@ -1,9 +1,10 @@
-Validation successful (dry-run). Planned configuration:
-  mode: single
-  threads: 1
-  util per-thread: 40.0%
-  duration: 3600 s
-  workload type: INT
-  temperature sensor: /sys/class/thermal/thermal_zone0/temp
-  temp-stop-threshold: 90.0 C
-  max-threads limit: 256
+✔ CHECK MODE: configuration validated.
+
+Planned configuration:
+  Mode            : single
+  Threads         : 1
+  Workload        : INT
+  Utilization     : 40.0%
+  Duration        : 3600 s
+
+✔ No workload executed (because --check).

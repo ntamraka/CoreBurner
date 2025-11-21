@@ -1,10 +1,11 @@
+Info: system shows 192 CPUs but --max-threads=2. Clamping thread count to 2.
 ✔ CHECK MODE: configuration validated.
 
 Planned configuration:
-  Mode            : single
-  Threads         : 1
+  Mode            : multi
+  Threads         : 2
   Workload        : INT
   Utilization     : 50.0%
-  Duration        : 120 s
+  Duration        : 1 s
 
 ✔ No workload executed (because --check).

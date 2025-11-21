@@ -1,0 +1,608 @@
+
+=== time: 1s elapsed (4s remaining) ===
+ core  0 : 100.00%  freq=2600542 kHz
+ core  1 : 100.00%  freq=2600653 kHz
+ core  2 : 100.00%  freq=2600624 kHz
+ core  3 : 100.00%  freq=2600528 kHz
+ core  4 : 100.00%  freq=2600357 kHz
+ core  5 : 100.00%  freq=2600432 kHz
+ core  6 : 100.00%  freq=2600313 kHz
+ core  7 : 100.00%  freq=2600405 kHz
+ core  8 : 100.00%  freq=2600445 kHz
+ core  9 : 100.00%  freq=2600466 kHz
+ core 10 : 100.00%  freq=2600377 kHz
+ core 11 : 100.00%  freq=2600483 kHz
+ core 12 : 100.00%  freq=2600490 kHz
+ core 13 : 100.00%  freq=2600462 kHz
+ core 14 : 100.00%  freq=2600459 kHz
+ core 15 : 100.00%  freq=2600486 kHz
+ core 16 : 100.00%  freq=2600355 kHz
+ core 17 : 100.00%  freq=2600407 kHz
+ core 18 : 100.00%  freq=2600414 kHz
+ core 19 : 100.00%  freq=2600481 kHz
+ core 20 : 100.00%  freq=2600549 kHz
+ core 21 : 100.00%  freq=2600553 kHz
+ core 22 : 100.00%  freq=2600585 kHz
+ core 23 : 100.00%  freq=2600517 kHz
+ core 24 : 100.00%  freq=2600494 kHz
+ core 25 : 100.00%  freq=2600477 kHz
+ core 26 : 100.00%  freq=2600487 kHz
+ core 27 : 100.00%  freq=2600458 kHz
+ core 28 : 100.00%  freq=2600511 kHz
+ core 29 : 100.00%  freq=2600557 kHz
+ core 30 : 100.00%  freq=2600552 kHz
+ core 31 : 100.00%  freq=2600565 kHz
+ core 32 : 100.00%  freq=2600372 kHz
+ core 33 : 100.00%  freq=2600467 kHz
+ core 34 : 100.00%  freq=2600452 kHz
+ core 35 : 100.00%  freq=2600431 kHz
+ core 36 : 100.00%  freq=2600416 kHz
+ core 37 : 100.00%  freq=2600449 kHz
+ core 38 : 100.00%  freq=2600466 kHz
+ core 39 : 100.00%  freq=2600452 kHz
+ core 40 : 100.00%  freq=2600457 kHz
+ core 41 : 100.00%  freq=2600479 kHz
+ core 42 : 100.00%  freq=2600532 kHz
+ core 43 : 100.00%  freq=2600447 kHz
+ core 44 : 100.00%  freq=2600462 kHz
+ core 45 : 100.00%  freq=2600435 kHz
+ core 46 : 100.00%  freq=2600480 kHz
+ core 47 : 100.00%  freq=2600488 kHz
+ core 48 : 100.00%  freq=2600594 kHz
+ core 49 : 100.00%  freq=2600549 kHz
+ core 50 : 100.00%  freq=2600614 kHz
+ core 51 : 100.00%  freq=2600644 kHz
+ core 52 : 100.00%  freq=2600551 kHz
+ core 53 : 100.00%  freq=2600537 kHz
+ core 54 : 100.00%  freq=2600541 kHz
+ core 55 : 100.00%  freq=2600449 kHz
+ core 56 : 100.00%  freq=2600566 kHz
+ core 57 : 100.00%  freq=2600533 kHz
+ core 58 : 100.00%  freq=2600546 kHz
+ core 59 : 100.00%  freq=2600447 kHz
+ core 60 : 100.00%  freq=2600292 kHz
+ core 61 : 100.00%  freq=2600353 kHz
+ core 62 : 100.00%  freq=2600294 kHz
+ core 63 : 100.00%  freq=2600321 kHz
+ cores 64..191 : avg_util=100.00% avg_freq=2600404 kHz
+ CPU temp : 52.00 °C
+ thread  0 pinned->cpu 0 : ops_total=2102536 target=100.0%
+ thread  1 pinned->cpu 1 : ops_total=2099103 target=100.0%
+ thread  2 pinned->cpu 2 : ops_total=2107175 target=100.0%
+ thread  3 pinned->cpu 3 : ops_total=2108346 target=100.0%
+ thread  4 pinned->cpu 4 : ops_total=2081790 target=100.0%
+ thread  5 pinned->cpu 5 : ops_total=2097924 target=100.0%
+ thread  6 pinned->cpu 6 : ops_total=2106278 target=100.0%
+ thread  7 pinned->cpu 7 : ops_total=2103846 target=100.0%
+ thread  8 pinned->cpu 8 : ops_total=2098157 target=100.0%
+ thread  9 pinned->cpu 9 : ops_total=2098607 target=100.0%
+ thread 10 pinned->cpu10 : ops_total=2103730 target=100.0%
+ thread 11 pinned->cpu11 : ops_total=2106903 target=100.0%
+ thread 12 pinned->cpu12 : ops_total=2097623 target=100.0%
+ thread 13 pinned->cpu13 : ops_total=2099573 target=100.0%
+ thread 14 pinned->cpu14 : ops_total=2104685 target=100.0%
+ thread 15 pinned->cpu15 : ops_total=2106295 target=100.0%
+ thread 16 pinned->cpu16 : ops_total=2097681 target=100.0%
+ thread 17 pinned->cpu17 : ops_total=2098998 target=100.0%
+ thread 18 pinned->cpu18 : ops_total=2104690 target=100.0%
+ thread 19 pinned->cpu19 : ops_total=2103026 target=100.0%
+ thread 20 pinned->cpu20 : ops_total=2095957 target=100.0%
+ thread 21 pinned->cpu21 : ops_total=2094871 target=100.0%
+ thread 22 pinned->cpu22 : ops_total=2100972 target=100.0%
+ thread 23 pinned->cpu23 : ops_total=2102739 target=100.0%
+ thread 24 pinned->cpu24 : ops_total=2094084 target=100.0%
+ thread 25 pinned->cpu25 : ops_total=2096301 target=100.0%
+ thread 26 pinned->cpu26 : ops_total=2101162 target=100.0%
+ thread 27 pinned->cpu27 : ops_total=2105095 target=100.0%
+ thread 28 pinned->cpu28 : ops_total=2097006 target=100.0%
+ thread 29 pinned->cpu29 : ops_total=2097812 target=100.0%
+ thread 30 pinned->cpu30 : ops_total=2101181 target=100.0%
+ thread 31 pinned->cpu31 : ops_total=2103525 target=100.0%
+ thread 32 pinned->cpu32 : ops_total=2113597 target=100.0%
+ thread 33 pinned->cpu33 : ops_total=246842 target=100.0%
+ thread 34 pinned->cpu34 : ops_total=2101851 target=100.0%
+ thread 35 pinned->cpu35 : ops_total=2101010 target=100.0%
+ thread 36 pinned->cpu36 : ops_total=2092789 target=100.0%
+ thread 37 pinned->cpu37 : ops_total=2093167 target=100.0%
+ thread 38 pinned->cpu38 : ops_total=2100108 target=100.0%
+ thread 39 pinned->cpu39 : ops_total=2101293 target=100.0%
+ thread 40 pinned->cpu40 : ops_total=2027301 target=100.0%
+ thread 41 pinned->cpu41 : ops_total=2092007 target=100.0%
+ thread 42 pinned->cpu42 : ops_total=2103471 target=100.0%
+ thread 43 pinned->cpu43 : ops_total=2101744 target=100.0%
+ thread 44 pinned->cpu44 : ops_total=2102985 target=100.0%
+ thread 45 pinned->cpu45 : ops_total=2099412 target=100.0%
+ thread 46 pinned->cpu46 : ops_total=2101936 target=100.0%
+ thread 47 pinned->cpu47 : ops_total=2106466 target=1001763747124,1,52.00,100.00,2600542,100.00,2600653,100.00,2600624,100.00,2600528,100.00,2600357,100.00,2600432,100.00,2600313,100.00,2600405,100.00,2600445,100.00,2600466,100.00,2600377,100.00,2600483,100.00,2600490,100.00,2600462,100.00,2600459,100.00,2600486,100.00,2600355,100.00,2600407,100.00,2600414,100.00,2600481,100.00,2600549,100.00,2600553,100.00,2600585,100.00,2600517,100.00,2600494,100.00,2600477,100.00,2600487,100.00,2600458,100.00,2600511,100.00,2600557,100.00,2600552,100.00,2600565,100.00,2600372,100.00,2600467,100.00,2600452,100.00,2600431,100.00,2600416,100.00,2600449,100.00,2600466,100.00,2600452,100.00,2600457,100.00,2600479,100.00,2600532,100.00,2600447,100.00,2600462,100.00,2600435,100.00,2600480,100.00,2600488,100.00,2600594,100.00,2600549,100.00,2600614,100.00,2600644,100.00,2600551,100.00,2600537,100.00,2600541,100.00,2600449,100.00,2600566,100.00,2600533,100.00,2600546,100.00,2600447,100.00,2600292,100.00,2600353,100.00,2600294,100.00,2600321,100.00,2600404,2102736,2099304,2107375,2108546,2081986,2098123,2106476,2104041,2098350,2098804,2103923,2107095,2097813,2099765,2104880,2106486,2097875,2099191,2104883,2103218,2096148,2095063,2101163,2102926,2094270,2096491,2101351,2105282,2097167,2097972,2101341,2103688,2113759,246842,2102011,2101171,2092945,2093326,2100268,2101453,2027460,2092165,2103630,2101899,2103139,2099568,2102089,2106622,2098903,2098524,2100481,2102156,2096312,2097227,2103219,2101479,2096877,2097834,2102247,2099118,2093428,2094826,2102964,2101240,2094613,2097376,2101770,2104195,2094987,2097060,2104138,2102685,2096896,2097845,2101065,2101284,2098651,2096753,2101522,2102512,2097259,2098161,2100853,2100536,2094052,2092617,2101510,2101918,2093870,2095294,2100429,2098020,2095346,2093210,2099354,2099278,2092421,2093101,2098311,2098596,2092095,2091031,2096938,2096016,2088833,2088764,2094840,2094629,2087918,2089402,2096289,2095664,2086812,2091937,2097939,2096249,2088907,2088826,2091908,2095372,2086912,2087435,2094078,2093720,2084722,2084287,2092379,2092300,2074054,2077958,2085951,2088656,2073227,2070253,2079404,2081895,2075678,2074683,2080461,2081287,2069246,2066132,2078508,2079013,2072958,2072570,2081946,2079200,2069761,2070109,2080488,2078306,2069835,2070837,2077490,2077918,2070874,2070422,2080147,2078289,2068027,2069326,2077154,2078219,2069676,2070232,2079831,2077371,2069397,2065404,2080020,2077731,2078056,2079254,2080215,2079671,2069176,2073471,1903866,2081163,410457,2090848,2076159,2077484,2073133,2073205,2077861,2077801,2065148,2066926,2070802,2071566
+arget=100.0%
+ thread 91 pinned->cpu91 : ops_total=2097885 target=100.0%
+ thread 92 pinned->cpu92 : ops_total=2095213 target=100.0%
+ thread 93 pinned->cpu93 : ops_total=2093077 target=100.0%
+ thread 94 pinned->cpu94 : ops_total=2099221 target=100.0%
+ thread 95 pinned->cpu95 : ops_total=2099146 target=100.0%
+ thread 96 pinned->cpu96 : ops_total=2092290 target=100.0%
+ thread 97 pinned->cpu97 : ops_total=2092975 target=100.0%
+ thread 98 pinned->cpu98 : ops_total=2098189 target=100.0%
+ thread 99 pinned->cpu99 : ops_total=2098470 target=100.0%
+ thread 100 pinned->cpu100 : ops_total=2091971 target=100.0%
+ thread 101 pinned->cpu101 : ops_total=2090908 target=100.0%
+ thread 102 pinned->cpu102 : ops_total=2096816 target=100.0%
+ thread 103 pinned->cpu103 : ops_total=2095892 target=100.0%
+ thread 104 pinned->cpu104 : ops_total=2088715 target=100.0%
+ thread 105 pinned->cpu105 : ops_total=2088642 target=100.0%
+ thread 106 pinned->cpu106 : ops_total=2094718 target=100.0%
+ thread 107 pinned->cpu107 : ops_total=2094508 target=100.0%
+ thread 108 pinned->cpu108 : ops_total=2087799 target=100.0%
+ thread 109 pinned->cpu109 : ops_total=2089284 target=100.0%
+ thread 110 pinned->cpu110 : ops_total=2096169 target=100.0%
+ thread 111 pinned->cpu111 : ops_total=2095544 target=100.0%
+ thread 112 pinned->cpu112 : ops_total=2086696 target=100.0%
+ thread 113 pinned->cpu113 : ops_total=2091819 target=100.0%
+ thread 114 pinned->cpu114 : ops_total=2097821 target=100.0%
+ thread 115 pinned->cpu115 : ops_total=2096131 target=100.0%
+ thread 116 pinned->cpu116 : ops_total=2088791 target=100.0%
+ thread 117 pinned->cpu117 : ops_total=2088711 target=100.0%
+ thread 118 pinned->cpu118 : ops_total=2091792 target=100.0%
+ thread 119 pinned->cpu119 : ops_total=2095257 target=100.0%
+ thread 120 pinned->cpu120 : ops_total=2086800 target=100.0%
+ thread 121 pinned->cpu121 : ops_total=2087321 target=100.0%
+ thread 122 pinned->cpu122 : ops_total=2093966 target=100.0%
+ thread 123 pinned->cpu123 : ops_total=2093608 target=100.0%
+ thread 124 pinned->cpu124 : ops_total=2084612 target=100.0%
+ thread 125 pinned->cpu125 : ops_total=2084177 target=100.0%
+ thread 126 pinned->cpu126 : ops_total=2092266 target=100.0%
+ thread 127 pinned->cpu127 : ops_total=2092188 target=100.0%
+ thread 128 pinned->cpu128 : ops_total=2073943 target=100.0%
+ thread 129 pinned->cpu129 : ops_total=2077848 target=100.0%
+ thread 130 pinned->cpu130 : ops_total=2085841 target=100.0%
+ thread 131 pinned->cpu131 : ops_total=2088547 target=100.0%
+ thread 132 pinned->cpu132 : ops_total=2073119 target=100.0%
+ thread 133 pinned->cpu133 : ops_total=2070146 target=100.0%
+ thread 134 pinned->cpu134 : ops_total=2079295 target=100.0%
+ thread 135 pinned->cpu135 : ops_total=2081789 target=100.0%
+ thread 136 pinned->cpu136 : ops_total=2075572 target=100.0%
+ thread 137 pinned->cpu137 : ops_total=2074577 target=100.0%
+ thread 138 pinned->cpu138 : ops_total=2080354 target=100.0%
+ thread 139 pinned->cpu139 : ops_total=2081185 target=100.0%
+ thread 140 pinned->cpu140 : ops_total=2069140 target=100.0%
+ thread 141 pinned->cpu141 : ops_total=2066027 target=100.0%
+ thread 142 pinned->cpu142 : ops_total=2078403 target=100.0%
+ thread 143 pinned->cpu143 : ops_total=2078909 target=100.0%
+ thread 144 pinned->cpu144 : ops_total=2072856 target=100.0%
+ thread 145 pinned->cpu145 : ops_total=2072468 target=100.0%
+ thread 146 pinned->cpu146 : ops_total=2081843 target=100.0%
+ thread 147 pinned->cpu147 : ops_total=2079098 target=100.0%
+ thread 148 pinned->cpu148 : ops_total=2069660 target=100.0%
+ thread 149 pinned->cpu149 : ops_total=2070009 target=100.0%
+ thread 150 pinned->cpu150 : ops_total=2080387 target=100.0%
+ thread 151 pinned->cpu151 : ops_total=2078205 target=100.0%
+ thread 152 pinned->cpu152 : ops_total=2069735 target=100.0%
+ thread 153 pinned->cpu153 : ops_total=2070738 target=100.0%
+ thread 154 pinned->cpu154 : ops_total=2077390 target=100.0%
+ thread 155 pinned->cpu155 : ops_total=2077819 target=100.0%
+ thread 156 pinned->cpu156 : ops_total=2070776 target=100.0%
+ thread 157 pinned->cpu157 : ops_total=2070324 target=100.0%
+ thread 158 pinned->cpu158 : ops_total=2080049 target=100.0%
+ thread 159 pinned->cpu159 : ops_total=2078192 target=100.0%
+ thread 160 pinned->cpu160 : ops_total=2067930 target=100.0%
+ thread 161 pinned->cpu161 : ops_total=2069230 target=100.0%
+ thread 162 pinned->cpu162 : ops_total=2077059 target=100.0%
+ thread 163 pinned->cpu163 : ops_total=2078123 target=100.0%ALERT: CPU temperature 52.00°C >= threshold 30.00°C. Stopping.
+
+ thread 164 pinned->cpu164 : ops_total=2069592 target=100.0%
+ thread 165 pinned->cpu165 : ops_total=2070149 target=100.0%
+ thread 166 pinned->cpu166 : ops_total=2079748 target=100.0%
+ thread 167 pinned->cpu167 : ops_total=2077293 target=100.0%
+ thread 168 pinned->cpu168 : ops_total=2069316 target=100.0%
+ thread 169 pinned->cpu169 : ops_total=2065326 target=100.0%
+ thread 170 pinned->cpu170 : ops_total=2079941 target=100.0%
+ thread 171 pinned->cpu171 : ops_total=2077650 target=100.0%
+ thread 172 pinned->cpu172 : ops_total=2077976 target=100.0%
+ thread 173 pinned->cpu173 : ops_total=2079179 target=100.0%
+ thread 174 pinned->cpu174 : ops_total=2080135 target=100.0%
+ thread 175 pinned->cpu175 : ops_total=2079591 target=100.0%
+ thread 176 pinned->cpu176 : ops_total=2069098 target=100.0%
+ thread 177 pinned->cpu177 : ops_total=2073393 target=100.0%
+ thread 178 pinned->cpu178 : ops_total=1903866 target=100.0%
+ thread 179 pinned->cpu179 : ops_total=2081084 target=100.0%
+ thread 180 pinned->cpu180 : ops_total=410457 target=100.0%
+ thread 181 pinned->cpu181 : ops_total=2090772 target=100.0%
+ thread 182 pinned->cpu182 : ops_total=2076082 target=100.0%
+ thread 183 pinned->cpu183 : ops_total=2077407 target=100.0%
+ thread 184 pinned->cpu184 : ops_total=2073057 target=100.0%
+ thread 185 pinned->cpu185 : ops_total=2073130 target=100.0%
+ thread 186 pinned->cpu186 : ops_total=2077786 target=100.0%
+ thread 187 pinned->cpu187 : ops_total=2077727 target=100.0%
+ thread 188 pinned->cpu188 : ops_total=2065074 target=100.0%
+ thread 189 pinned->cpu189 : ops_total=2066855 target=100.0%
+ thread 190 pinned->cpu190 : ops_total=2070730 target=100.0%
+ thread 191 pinned->cpu191 : ops_total=2071493 target=100.0%
+
+=== SUMMARY ===
+ core  0 : last_total=4245636 last_idle=4172972
+ core  1 : last_total=4260083 last_idle=4199851
+ core  2 : last_total=4260564 last_idle=4215444
+ core  3 : last_total=4261224 last_idle=4220318
+ core  4 : last_total=4261135 last_idle=4211823
+ core  5 : last_total=4261287 last_idle=4219819
+ core  6 : last_total=4261684 last_idle=4220788
+ core  7 : last_total=4261342 last_idle=4219464
+ core  8 : last_total=4260282 last_idle=4211266
+ core  9 : last_total=4261271 last_idle=4217557
+ core 10 : last_total=4261369 last_idle=4226670
+ core 11 : last_total=4261420 last_idle=4226086
+ core 12 : last_total=4261321 last_idle=4226174
+ core 13 : last_total=4261620 last_idle=4226979
+ core 14 : last_total=4261455 last_idle=4226743
+ core 15 : last_total=4261325 last_idle=4225690
+ core 16 : last_total=4261459 last_idle=4226366
+ core 17 : last_total=4261608 last_idle=4226809
+ core 18 : last_total=4260493 last_idle=4225632
+ core 19 : last_total=4261561 last_idle=4226217
+ core 20 : last_total=4261372 last_idle=4226391
+ core 21 : last_total=4261556 last_idle=4226849
+ core 22 : last_total=4261637 last_idle=4226984
+ core 23 : last_total=4261569 last_idle=4226298
+ core 24 : last_total=4261420 last_idle=4226531
+ core 25 : last_total=4261685 last_idle=4227148
+ core 26 : last_total=4261646 last_idle=4227272
+ core 27 : last_total=4261544 last_idle=4226202
+ core 28 : last_total=4261343 last_idle=4226511
+ core 29 : last_total=4261616 last_idle=4227035
+ core 30 : last_total=4261678 last_idle=4227220
+ core 31 : last_total=4261600 last_idle=4226643
+ core 32 : last_total=4260678 last_idle=4214749
+ core 33 : last_total=4261593 last_idle=4227130
+ core 34 : last_total=4261696 last_idle=4227458
+ core 35 : last_total=4261318 last_idle=4226284
+ core 36 : last_total=4261249 last_idle=4226484
+ core 37 : last_total=4261646 last_idle=4227330
+ core 38 : last_total=4260674 last_idle=4225973
+ core 39 : last_total=4261694 last_idle=4227299
+ core 40 : last_total=4261500 last_idle=4226661
+ core 41 : last_total=4261694 last_idle=4227172
+ core 42 : last_total=4261691 last_idle=4227242
+ core 43 : last_total=4261706 last_idle=4227309
+ core 44 : last_total=4261612 last_idle=4227138
+ core 45 : last_total=4261717 last_idle=4227419
+ core 46 : last_total=4261738 last_idle=4227489
+ core 47 : last_total=4261685 last_idle=4227131
+ core 48 : last_total=4261465 last_idle=4226665
+ core 49 : last_total=4261513 last_idle=4227197
+ core 50 : last_total=4261668 last_idle=4227436
+ core 51 : last_total=4261673 last_idle=4227127
+ core 52 : last_total=4261559 last_idle=4226940
+ core 53 : last_total=4261595 last_idle=4227242
+ core 54 : last_total=4261695 last_idle=4227318
+ core 55 : last_total=4261617 last_idle=4226772
+ core 56 : last_total=4261433 last_idle=4225549
+ core 57 : last_total=4261409 last_idle=4224977
+ core 58 : last_total=4261608 last_idle=4227240
+ core 59 : last_total=4261639 last_idle=4226953
+ core 60 : last_total=4261509 last_idle=4226765
+ core 61 : last_total=4261434 last_idle=4227104
+ core 62 : last_total=4261602 last_idle=4227069
+ core 63 : last_total=4261623 last_idle=4227071
+ core 64 : last_total=4243599 last_idle=4193680
+ core 65 : last_total=4258586 last_idle=4216354
+ core 66 : last_total=4259790 last_idle=4214738
+ core 67 : last_total=4259287 last_idle=4224517
+ core 68 : last_total=4261054 last_idle=4225737
+ core 69 : last_total=4258840 last_idle=4223904
+ core 70 : last_total=4260782 last_idle=4226102
+ core 71 : last_total=4261632 last_idle=4227072
+ core 72 : last_total=4261369 last_idle=4226692
+ core 73 : last_total=4261504 last_idle=4226870
+ core 74 : last_total=4261738 last_idle=4227442
+ core 75 : last_total=4261585 last_idle=4226569
+ core 76 : last_total=4261531 last_idle=4226561
+ core 77 : last_total=4261711 last_idle=4227281
+ core 78 : last_total=4261728 last_idle=4227354
+ core 79 : last_total=4261651 last_idle=4226756
+ core 80 : last_total=4260499 last_idle=4225427
+ core 81 : last_total=4261203 last_idle=4226257
+ core 82 : last_total=4261534 last_idle=4227016
+ core 83 : last_total=4261518 last_idle=4227115
+ core 84 : last_total=4261653 last_idle=4226150
+ core 85 : last_total=4261691 last_idle=4227321
+ core 86 : last_total=4261563 last_idle=4226769
+ core 87 : last_total=4261629 last_idle=4227003
+ core 88 : last_total=4261672 last_idle=4221513
+ core 89 : last_total=4261362 last_idle=4223598
+ core 90 : last_total=4261050 last_idle=4226814
+ core 91 : last_total=4261313 last_idle=4225220
+ core 92 : last_total=4261358 last_idle=4226796
+ core 93 : last_total=4261660 last_idle=4227162
+ core 94 : last_total=4261726 last_idle=4227421
+ core 95 : last_total=4261681 last_idle=4227140
+ core 96 : last_total=4261669 last_idle=4227166
+ core 97 : last_total=4261240 last_idle=4226801
+ core 98 : last_total=4261729 last_idle=4227446
+ core 99 : last_total=4261660 last_idle=4227004
+ core 100 : last_total=4261676 last_idle=4227232
+ core 101 : last_total=4261731 last_idle=4227209
+ core 102 : last_total=4261742 last_idle=4227499
+ core 103 : last_total=4261681 last_idle=4226985
+ core 104 : last_total=4261552 last_idle=4227214
+ core 105 : last_total=4261717 last_idle=4227499
+ core 106 : last_total=4261678 last_idle=4227414
+ core 107 : last_total=4260643 last_idle=4226144
+ core 108 : last_total=4261625 last_idle=4227317
+ core 109 : last_total=4261428 last_idle=4227133
+ core 110 : last_total=4261474 last_idle=4227261
+ core 111 : last_total=4261480 last_idle=4226765
+ core 112 : last_total=4261385 last_idle=4226746
+ core 113 : last_total=4261507 last_idle=4226794
+ core 114 : last_total=4261657 last_idle=4227424
+ core 115 : last_total=4261727 last_idle=4227475
+ core 116 : last_total=4261647 last_idle=4227118
+ core 117 : last_total=4261622 last_idle=4227269
+ core 118 : last_total=4261620 last_idle=4226872
+ core 119 : last_total=4261692 last_idle=4227251
+ core 120 : last_total=4261436 last_idle=4225961
+ core 121 : last_total=4261647 last_idle=4227079
+ core 122 : last_total=4261673 last_idle=4227329
+ core 123 : last_total=4261686 last_idle=4226580
+ core 124 : last_total=4261510 last_idle=4226417
+ core 125 : last_total=4261701 last_idle=4227149
+ core 126 : last_total=4261667 last_idle=4227173
+ core 127 : last_total=4261629 last_idle=4226465
+ core 128 : last_total=4261071 last_idle=4225164
+ core 129 : last_total=4261195 last_idle=4225975
+ core 130 : last_total=4261246 last_idle=4225991
+ core 131 : last_total=4261421 last_idle=4226406
+ core 132 : last_total=4260878 last_idle=4225347
+ core 133 : last_total=4261120 last_idle=4226192
+ core 134 : last_total=4261319 last_idle=4226536
+ core 135 : last_total=4261308 last_idle=4226491
+ core 136 : last_total=4261613 last_idle=4226794
+ core 137 : last_total=4261658 last_idle=4227054
+ core 138 : last_total=4261556 last_idle=4226504
+ core 139 : last_total=4261633 last_idle=4226920
+ core 140 : last_total=4261293 last_idle=4225704
+ core 141 : last_total=4261609 last_idle=4226805
+ core 142 : last_total=4261666 last_idle=4227131
+ core 143 : last_total=4261505 last_idle=4226418
+ core 144 : last_total=4261530 last_idle=4226364
+ core 145 : last_total=4261554 last_idle=4226742
+ core 146 : last_total=4261327 last_idle=4226069
+ core 147 : last_total=4261301 last_idle=4225775
+ core 148 : last_total=4261372 last_idle=4225961
+ core 149 : last_total=4261513 last_idle=4226457
+ core 150 : last_total=4261651 last_idle=4227047
+ core 151 : last_total=4261488 last_idle=4225886
+ core 152 : last_total=4261425 last_idle=4225935
+ core 153 : last_total=4261634 last_idle=4226970
+ core 154 : last_total=4261678 last_idle=4227275
+ core 155 : last_total=4261452 last_idle=4226059
+ core 156 : last_total=4261388 last_idle=4225952
+ core 157 : last_total=4261436 last_idle=4226354
+ core 158 : last_total=4261579 last_idle=4227017
+ core 159 : last_total=4261471 last_idle=4226061
+ core 160 : last_total=4260622 last_idle=4221709
+ core 161 : last_total=4261269 last_idle=4226290
+ core 162 : last_total=4261423 last_idle=4226864
+ core 163 : last_total=4261509 last_idle=4226302
+ core 164 : last_total=4261161 last_idle=4225910
+ core 165 : last_total=4261212 last_idle=4224664
+ core 166 : last_total=4261033 last_idle=4225420
+ core 167 : last_total=4260912 last_idle=4224987
+ core 168 : last_total=4261389 last_idle=4220327
+ core 169 : last_total=4261272 last_idle=4222227
+ core 170 : last_total=4261543 last_idle=4226884
+ core 171 : last_total=4261573 last_idle=4226000
+ core 172 : last_total=4260597 last_idle=4222983
+ core 173 : last_total=4260951 last_idle=4223009
+ core 174 : last_total=4261178 last_idle=4223637
+ core 175 : last_total=4261035 last_idle=4223655
+ core 176 : last_total=4261339 last_idle=4225355
+ core 177 : last_total=4261097 last_idle=4224832
+ core 178 : last_total=4261429 last_idle=4226195
+ core 179 : last_total=4261284 last_idle=4225109
+ core 180 : last_total=4261504 last_idle=4226558
+ core 181 : last_total=4261505 last_idle=4225412
+ core 182 : last_total=4261559 last_idle=4226618
+ core 183 : last_total=4261394 last_idle=4226121
+ core 184 : last_total=4261511 last_idle=4226391
+ core 185 : last_total=4261519 last_idle=4226416
+ core 186 : last_total=4261561 last_idle=4226719
+ core 187 : last_total=4261346 last_idle=4225884
+ core 188 : last_total=4261544 last_idle=4225914
+ core 189 : last_total=4261601 last_idle=4227117
+ core 190 : last_total=4261535 last_idle=4226620
+ core 191 : last_total=4261371 last_idle=4225933
+ Final CPU temp: 42.00 C
+ Threads: 192  Duration requested: 5 s  Time elapsed: 2s
+ thread  0 pinned->cpu 0 : total ops=2102782
+ thread  1 pinned->cpu 1 : total ops=2099348
+ thread  2 pinned->cpu 2 : total ops=2107418
+ thread  3 pinned->cpu 3 : total ops=2108589
+ thread  4 pinned->cpu 4 : total ops=2082029
+ thread  5 pinned->cpu 5 : total ops=2098166
+ thread  6 pinned->cpu 6 : total ops=2106519
+ thread  7 pinned->cpu 7 : total ops=2104083
+ thread  8 pinned->cpu 8 : total ops=2098392
+ thread  9 pinned->cpu 9 : total ops=2098845
+ thread 10 pinned->cpu10 : total ops=2103965
+ thread 11 pinned->cpu11 : total ops=2107137
+ thread 12 pinned->cpu12 : total ops=2097854
+ thread 13 pinned->cpu13 : total ops=2099806
+ thread 14 pinned->cpu14 : total ops=2104920
+ thread 15 pinned->cpu15 : total ops=2106527
+ thread 16 pinned->cpu16 : total ops=2097915
+ thread 17 pinned->cpu17 : total ops=2099231
+ thread 18 pinned->cpu18 : total ops=2104923
+ thread 19 pinned->cpu19 : total ops=2103255
+ thread 20 pinned->cpu20 : total ops=2096183
+ thread 21 pinned->cpu21 : total ops=2095101
+ thread 22 pinned->cpu22 : total ops=2101203
+ thread 23 pinned->cpu23 : total ops=2102966
+ thread 24 pinned->cpu24 : total ops=2094309
+ thread 25 pinned->cpu25 : total ops=2096530
+ thread 26 pinned->cpu26 : total ops=2101390
+ thread 27 pinned->cpu27 : total ops=2105320
+ thread 28 pinned->cpu28 : total ops=2097205
+ thread 29 pinned->cpu29 : total ops=2098010
+ thread 30 pinned->cpu30 : total ops=2101379
+ thread 31 pinned->cpu31 : total ops=2103726
+ thread 32 pinned->cpu32 : total ops=2113796
+ thread 33 pinned->cpu33 : total ops=246842
+ thread 34 pinned->cpu34 : total ops=2102047
+ thread 35 pinned->cpu35 : total ops=2101207
+ thread 36 pinned->cpu36 : total ops=2092981
+ thread 37 pinned->cpu37 : total ops=2093359
+ thread 38 pinned->cpu38 : total ops=2100303
+ thread 39 pinned->cpu39 : total ops=2101486
+ thread 40 pinned->cpu40 : total ops=2027494
+ thread 41 pinned->cpu41 : total ops=2092197
+ thread 42 pinned->cpu42 : total ops=2103665
+ thread 43 pinned->cpu43 : total ops=2101933
+ thread 44 pinned->cpu44 : total ops=2103173
+ thread 45 pinned->cpu45 : total ops=2099602
+ thread 46 pinned->cpu46 : total ops=2102123
+ thread 47 pinned->cpu47 : total ops=2106656
+ thread 48 pinned->cpu48 : total ops=2098937
+ thread 49 pinned->cpu49 : total ops=2098558
+ thread 50 pinned->cpu50 : total ops=2100515
+ thread 51 pinned->cpu51 : total ops=2102190
+ thread 52 pinned->cpu52 : total ops=2096345
+ thread 53 pinned->cpu53 : total ops=2097260
+ thread 54 pinned->cpu54 : total ops=2103252
+ thread 55 pinned->cpu55 : total ops=2101512
+ thread 56 pinned->cpu56 : total ops=2096909
+ thread 57 pinned->cpu57 : total ops=2097867
+ thread 58 pinned->cpu58 : total ops=2102280
+ thread 59 pinned->cpu59 : total ops=2099151
+ thread 60 pinned->cpu60 : total ops=2093460
+ thread 61 pinned->cpu61 : total ops=2094857
+ thread 62 pinned->cpu62 : total ops=2102995
+ thread 63 pinned->cpu63 : total ops=2101271
+ thread 64 pinned->cpu64 : total ops=2094643
+ thread 65 pinned->cpu65 : total ops=2097406
+ thread 66 pinned->cpu66 : total ops=2101800
+ thread 67 pinned->cpu67 : total ops=2104225
+ thread 68 pinned->cpu68 : total ops=2095017
+ thread 69 pinned->cpu69 : total ops=2097090
+ thread 70 pinned->cpu70 : total ops=2104168
+ thread 71 pinned->cpu71 : total ops=2102712
+ thread 72 pinned->cpu72 : total ops=2096926
+ thread 73 pinned->cpu73 : total ops=2097875
+ thread 74 pinned->cpu74 : total ops=2101094
+ thread 75 pinned->cpu75 : total ops=2101313
+ thread 76 pinned->cpu76 : total ops=2098680
+ thread 77 pinned->cpu77 : total ops=2096782
+ thread 78 pinned->cpu78 : total ops=2101550
+ thread 79 pinned->cpu79 : total ops=2102540
+ thread 80 pinned->cpu80 : total ops=2097286
+ thread 81 pinned->cpu81 : total ops=2098188
+ thread 82 pinned->cpu82 : total ops=2100881
+ thread 83 pinned->cpu83 : total ops=2100563
+ thread 84 pinned->cpu84 : total ops=2094078
+ thread 85 pinned->cpu85 : total ops=2092639
+ thread 86 pinned->cpu86 : total ops=2101536
+ thread 87 pinned->cpu87 : total ops=2101944
+ thread 88 pinned->cpu88 : total ops=2093895
+ thread 89 pinned->cpu89 : total ops=2095317
+ thread 90 pinned->cpu90 : total ops=2100455
+ thread 91 pinned->cpu91 : total ops=2098046
+ thread 92 pinned->cpu92 : total ops=2095372
+ thread 93 pinned->cpu93 : total ops=2093236
+ thread 94 pinned->cpu94 : total ops=2099380
+ thread 95 pinned->cpu95 : total ops=2099304
+ thread 96 pinned->cpu96 : total ops=2092446
+ thread 97 pinned->cpu97 : total ops=2093126
+ thread 98 pinned->cpu98 : total ops=2098336
+ thread 99 pinned->cpu99 : total ops=2098620
+ thread 100 pinned->cpu100 : total ops=2092119
+ thread 101 pinned->cpu101 : total ops=2091055
+ thread 102 pinned->cpu102 : total ops=2096962
+ thread 103 pinned->cpu103 : total ops=2096040
+ thread 104 pinned->cpu104 : total ops=2088856
+ thread 105 pinned->cpu105 : total ops=2088787
+ thread 106 pinned->cpu106 : total ops=2094863
+ thread 107 pinned->cpu107 : total ops=2094652
+ thread 108 pinned->cpu108 : total ops=2087941
+ thread 109 pinned->cpu109 : total ops=2089425
+ thread 110 pinned->cpu110 : total ops=2096312
+ thread 111 pinned->cpu111 : total ops=2095687
+ thread 112 pinned->cpu112 : total ops=2086835
+ thread 113 pinned->cpu113 : total ops=2091960
+ thread 114 pinned->cpu114 : total ops=2097961
+ thread 115 pinned->cpu115 : total ops=2096271
+ thread 116 pinned->cpu116 : total ops=2088928
+ thread 117 pinned->cpu117 : total ops=2088847
+ thread 118 pinned->cpu118 : total ops=2091930
+ thread 119 pinned->cpu119 : total ops=2095394
+ thread 120 pinned->cpu120 : total ops=2086933
+ thread 121 pinned->cpu121 : total ops=2087455
+ thread 122 pinned->cpu122 : total ops=2094098
+ thread 123 pinned->cpu123 : total ops=2093740
+ thread 124 pinned->cpu124 : total ops=2084742
+ thread 125 pinned->cpu125 : total ops=2084307
+ thread 126 pinned->cpu126 : total ops=2092399
+ thread 127 pinned->cpu127 : total ops=2092321
+ thread 128 pinned->cpu128 : total ops=2074073
+ thread 129 pinned->cpu129 : total ops=2077977
+ thread 130 pinned->cpu130 : total ops=2085971
+ thread 131 pinned->cpu131 : total ops=2088676
+ thread 132 pinned->cpu132 : total ops=2073246
+ thread 133 pinned->cpu133 : total ops=2070272
+ thread 134 pinned->cpu134 : total ops=2079423
+ thread 135 pinned->cpu135 : total ops=2081914
+ thread 136 pinned->cpu136 : total ops=2075696
+ thread 137 pinned->cpu137 : total ops=2074702
+ thread 138 pinned->cpu138 : total ops=2080480
+ thread 139 pinned->cpu139 : total ops=2081306
+ thread 140 pinned->cpu140 : total ops=2069264
+ thread 141 pinned->cpu141 : total ops=2066150
+ thread 142 pinned->cpu142 : total ops=2078526
+ thread 143 pinned->cpu143 : total ops=2079031
+ thread 144 pinned->cpu144 : total ops=2072975
+ thread 145 pinned->cpu145 : total ops=2072586
+ thread 146 pinned->cpu146 : total ops=2081962
+ thread 147 pinned->cpu147 : total ops=2079216
+ thread 148 pinned->cpu148 : total ops=2069777
+ thread 149 pinned->cpu149 : total ops=2070125
+ thread 150 pinned->cpu150 : total ops=2080504
+ thread 151 pinned->cpu151 : total ops=2078323
+ thread 152 pinned->cpu152 : total ops=2069850
+ thread 153 pinned->cpu153 : total ops=2070852
+ thread 154 pinned->cpu154 : total ops=2077505
+ thread 155 pinned->cpu155 : total ops=2077933
+ thread 156 pinned->cpu156 : total ops=2070888
+ thread 157 pinned->cpu157 : total ops=2070436
+ thread 158 pinned->cpu158 : total ops=2080162
+ thread 159 pinned->cpu159 : total ops=2078304
+ thread 160 pinned->cpu160 : total ops=2068040
+ thread 161 pinned->cpu161 : total ops=2069339
+ thread 162 pinned->cpu162 : total ops=2077168
+ thread 163 pinned->cpu163 : total ops=2078232
+ thread 164 pinned->cpu164 : total ops=2069688
+ thread 165 pinned->cpu165 : total ops=2070244
+ thread 166 pinned->cpu166 : total ops=2079844
+ thread 167 pinned->cpu167 : total ops=2077384
+ thread 168 pinned->cpu168 : total ops=2069410
+ thread 169 pinned->cpu169 : total ops=2065416
+ thread 170 pinned->cpu170 : total ops=2080032
+ thread 171 pinned->cpu171 : total ops=2077743
+ thread 172 pinned->cpu172 : total ops=2078068
+ thread 173 pinned->cpu173 : total ops=2079266
+ thread 174 pinned->cpu174 : total ops=2080226
+ thread 175 pinned->cpu175 : total ops=2079682
+ thread 176 pinned->cpu176 : total ops=2069188
+ thread 177 pinned->cpu177 : total ops=2073482
+ thread 178 pinned->cpu178 : total ops=1903867
+ thread 179 pinned->cpu179 : total ops=2081174
+ thread 180 pinned->cpu180 : total ops=410458
+ thread 181 pinned->cpu181 : total ops=2090859
+ thread 182 pinned->cpu182 : total ops=2076169
+ thread 183 pinned->cpu183 : total ops=2077494
+ thread 184 pinned->cpu184 : total ops=2073143
+ thread 185 pinned->cpu185 : total ops=2073215
+ thread 186 pinned->cpu186 : total ops=2077870
+ thread 187 pinned->cpu187 : total ops=2077810
+ thread 188 pinned->cpu188 : total ops=2065157
+ thread 189 pinned->cpu189 : total ops=2066936
+ thread 190 pinned->cpu190 : total ops=2070811
+ thread 191 pinned->cpu191 : total ops=2071574
+Summary written to test_results/safety_temp.csv.summary.txt
