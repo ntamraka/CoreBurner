@@ -1,3 +1,12 @@
+   ____                 ____                      
+  / ___|___  _ __ ___  | __ ) _   _ _ __   ___ _ __ 
+ | |   / _ \| '_ ` _ \ |  _ \| | | | '_ \ / _ \ '__|
+ | |__| (_) | | | | | || |_) | |_| | | | |  __/ |   
+  \____\___/|_| |_| |_|____/ \__, |_| |_|\___|_|   
+                              |___/                
+          CoreBurner - CPU Stress & Telemetry
+
+          
 # **CoreBurner — Advanced Linux CPU Stress, Telemetry & CPUFreq Control Tool**
 
 CoreBurner is a high-precision Linux workload generator built for **benchmarking**, **thermal testing**, **frequency scaling analysis**, and **CPU stability validation**.  
