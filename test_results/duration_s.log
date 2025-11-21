@@ -1,0 +1,785 @@
+
+=== time: 1s elapsed (2s remaining) ===
+ core  0 :  60.00%
+ core  1 :   0.00%
+ core  2 :   0.00%
+ core  3 :   0.00%
+ core  4 :   0.00%
+ core  5 :   0.00%
+ core  6 :   0.00%
+ core  7 :   0.00%
+ core  8 :   1.00%
+ core  9 :   0.00%
+ core 10 :   0.00%
+ core 11 :   0.00%
+ core 12 :   0.00%
+ core 13 :   0.00%
+ core 14 :   0.00%
+ core 15 :   0.00%
+ core 16 :   0.00%
+ core 17 :   0.00%
+ core 18 :   0.00%
+ core 19 :   0.00%
+ core 20 :   0.00%
+ core 21 :   0.00%
+ core 22 :   0.00%
+ core 23 :   0.00%
+ core 24 :   0.00%
+ core 25 :   0.00%
+ core 26 :   0.00%
+ core 27 :   0.00%
+ core 28 :   0.00%
+ core 29 :   0.99%
+ core 30 :   0.99%
+ core 31 :   0.00%
+ core 32 :   0.00%
+ core 33 :   0.00%
+ core 34 :   0.00%
+ core 35 :   0.00%
+ core 36 :   0.00%
+ core 37 :   0.00%
+ core 38 :   0.00%
+ core 39 :   0.00%
+ core 40 :   0.00%
+ core 41 :   0.00%
+ core 42 :   0.00%
+ core 43 :   0.00%
+ core 44 :   0.00%
+ core 45 :   0.00%
+ core 46 :   0.00%
+ core 47 :   0.00%
+ core 48 :   0.00%
+ core 49 :   0.00%
+ core 50 :   0.00%
+ core 51 :   0.00%
+ core 52 :   0.00%
+ core 53 :   0.00%
+ core 54 :   0.00%
+ core 55 :   0.00%
+ core 56 :   0.00%
+ core 57 :   0.00%
+ core 58 :   0.00%
+ core 59 :   0.00%
+ core 60 :   0.00%
+ core 61 :   0.00%
+ core 62 :   0.00%
+ core 63 :   0.00%
+ core 64 :   0.00%
+ core 65 :   0.00%
+ core 66 :   0.00%
+ core 67 :   0.00%
+ core 68 :   0.00%
+ core 69 :   0.00%
+ core 70 :   0.00%
+ core 71 :   0.00%
+ core 72 :   0.00%
+ core 73 :   0.00%
+ core 74 :   0.00%
+ core 75 :   0.00%
+ core 76 :   0.00%
+ core 77 :   0.00%
+ core 78 :   0.00%
+ core 79 :   0.00%
+ core 80 :   0.00%
+ core 81 :   0.00%
+ core 82 :   0.00%
+ core 83 :   0.00%
+ core 84 :   0.00%
+ core 85 :   0.00%
+ core 86 :   0.00%
+ core 87 :   0.00%
+ core 88 :   0.00%
+ core 89 :   0.00%
+ core 90 :   0.00%
+ core 91 :   0.00%
+ core 92 :   0.00%
+ core 93 :   0.00%
+ core 94 :   0.00%
+ core 95 :   0.00%
+ core 96 :   0.00%
+ core 97 :   0.00%
+ core 98 :   0.00%
+ core 99 :   0.00%
+ core 100 :   0.00%
+ core 101 :   0.00%
+ core 102 :   0.00%
+ core 103 :   0.00%
+ core 104 :   0.00%
+ core 105 :   0.00%
+ core 106 :   0.00%
+ core 107 :   0.00%
+ core 108 :   0.00%
+ core 109 :   0.00%
+ core 110 :   0.00%
+ core 111 :   0.00%
+ core 112 :   0.00%
+ core 113 :   0.00%
+ core 114 :   0.00%
+ core 115 :   0.00%
+ core 116 :   0.00%
+ core 117 :   0.00%
+ core 118 :   0.00%
+ core 119 :   0.00%
+ core 120 :   0.00%
+ core 121 :   0.00%
+ core 122 :   0.00%
+ core 123 :   0.00%
+ core 124 :   0.00%
+ core 125 :   0.00%
+ core 126 :   0.00%
+ core 127 :   0.00%
+ core 128 :   0.00%
+ core 129 :   0.00%
+ core 130 :   0.00%
+ core 131 :   0.00%
+ core 132 :   0.00%
+ core 133 :   0.00%
+ core 134 :   0.00%
+ core 135 :   0.00%
+ core 136 :   0.00%
+ core 137 :   0.00%
+ core 138 :   0.00%
+ core 139 :   0.00%
+ core 140 :   0.00%
+ core 141 :   0.00%
+ core 142 :   0.00%
+ core 143 :   0.00%
+ core 144 :   0.00%
+ core 145 :   0.00%
+ core 146 :   0.00%
+ core 147 :   0.00%
+ core 148 :   0.00%
+ core 149 :   0.00%
+ core 150 :   0.00%
+ core 151 :   0.00%
+ core 152 :   0.00%
+ core 153 :   0.00%
+ core 154 :   0.00%
+ core 155 :   0.00%
+ core 156 :   0.00%
+ core 157 :   0.00%
+ core 158 :   0.00%
+ core 159 :   0.00%
+ core 160 :   0.00%
+ core 161 :   0.00%
+ core 162 :   0.00%
+ core 163 :   0.00%
+ core 164 :   0.00%
+ core 165 :   0.00%
+ core 166 :   0.00%
+ core 167 :   0.00%
+ core 168 :   0.00%
+ core 169 :   0.00%
+ core 170 :   0.00%
+ core 171 :   0.00%
+ core 172 :   0.00%
+ core 173 :   0.00%
+ core 174 :   0.00%
+ core 175 :   0.00%
+ core 176 :   0.00%
+ core 177 :   0.00%
+ core 178 :   0.00%
+ core 179 :   0.00%
+ core 180 :   0.00%
+ core 181 :   0.00%
+ core 182 :   0.00%
+ core 183 :   0.00%
+ core 184 :   0.00%
+ core 185 :   0.00%
+ core 186 :   0.00%
+ core 187 :   0.00%
+ core 188 :   0.00%
+ core 189 :   0.00%
+ core 190 :   0.00%
+ core 191 :   0.00%
+ CPU temp : 42.00 °C
+ thread  0 pinned->cpu 0 : ops_total=545793 target=60.0%
+
+=== time: 2s elapsed (1s remaining) ===
+ core  0 :  60.00%
+ core  1 :   0.00%
+ core  2 :   0.00%
+ core  3 :   0.00%
+ core  4 :   0.00%
+ core  5 :   0.00%
+ core  6 :   0.00%
+ core  7 :   0.00%
+ core  8 :   5.00%
+ core  9 :   0.00%
+ core 10 :   0.00%
+ core 11 :   0.00%
+ core 12 :   0.00%
+ core 13 :   0.00%
+ core 14 :   0.00%
+ core 15 :   0.00%
+ core 16 :   0.00%
+ core 17 :   0.00%
+ core 18 :   0.00%
+ core 19 :   0.00%
+ core 20 :   0.00%
+ core 21 :   0.00%
+ core 22 :   0.00%
+ core 23 :   0.00%
+ core 24 :   0.99%
+ core 25 :   0.98%
+ core 26 :   0.00%
+ core 27 :   0.00%
+ core 28 :   1.00%
+ core 29 :   0.00%
+ core 30 :   0.00%
+ core 31 :   0.99%
+ core 32 :   0.00%
+ core 33 :   0.00%
+ core 34 :   0.00%
+ core 35 :   0.99%
+ core 36 :   0.00%
+ core 37 :   0.00%
+ core 38 :   0.00%
+ core 39 :   0.00%
+ core 40 :   0.00%
+ core 41 :   0.00%
+ core 42 :   0.00%
+ core 43 :   0.00%
+ core 44 :   0.00%
+ core 45 :   0.00%
+ core 46 :   0.00%
+ core 47 :   0.00%
+ core 48 :   0.00%
+ core 49 :   0.00%
+ core 50 :   0.00%
+ core 51 :   0.00%
+ core 52 :   0.00%
+ core 53 :   0.00%
+ core 54 :   0.00%
+ core 55 :   0.00%
+ core 56 :   0.00%
+ core 57 :   0.00%
+ core 58 :   0.00%
+ core 59 :   0.00%
+ core 60 :   0.00%
+ core 61 :   0.00%
+ core 62 :   0.00%
+ core 63 :   0.00%
+ core 64 :   0.00%
+ core 65 :   0.00%
+ core 66 :   0.00%
+ core 67 :   0.00%
+ core 68 :   0.00%
+ core 69 :   0.00%
+ core 70 :   0.00%
+ core 71 :   0.00%
+ core 72 :   0.00%
+ core 73 :   0.00%
+ core 74 :   0.00%
+ core 75 :   0.00%
+ core 76 :   0.00%
+ core 77 :   0.00%
+ core 78 :   0.00%
+ core 79 :   0.00%
+ core 80 :   0.00%
+ core 81 :   0.00%
+ core 82 :   0.00%
+ core 83 :   0.00%
+ core 84 :   0.00%
+ core 85 :   0.00%
+ core 86 :   0.00%
+ core 87 :   0.00%
+ core 88 :   0.00%
+ core 89 :   0.00%
+ core 90 :   0.00%
+ core 91 :   0.00%
+ core 92 :   0.00%
+ core 93 :   0.00%
+ core 94 :   0.00%
+ core 95 :   0.00%
+ core 96 :   0.00%
+ core 97 :   0.00%
+ core 98 :   0.00%
+ core 99 :   0.00%
+ core 100 :   0.00%
+ core 101 :   0.00%
+ core 102 :   0.00%
+ core 103 :   0.00%
+ core 104 :   0.00%
+ core 105 :   0.00%
+ core 106 :   0.00%
+ core 107 :   0.00%
+ core 108 :   0.00%
+ core 109 :   0.00%
+ core 110 :   0.00%
+ core 111 :   0.00%
+ core 112 :   0.00%
+ core 113 :   0.00%
+ core 114 :   0.00%
+ core 115 :   0.00%
+ core 116 :   0.00%
+ core 117 :   0.00%
+ core 118 :   0.00%
+ core 119 :   0.00%
+ core 120 :   0.00%
+ core 121 :   0.00%
+ core 122 :   0.00%
+ core 123 :   0.00%
+ core 124 :   0.00%
+ core 125 :   0.00%
+ core 126 :   0.00%
+ core 127 :   0.00%
+ core 128 :   0.00%
+ core 129 :   0.00%
+ core 130 :   0.00%
+ core 131 :   0.00%
+ core 132 :   0.00%
+ core 133 :   0.00%
+ core 134 :   0.00%
+ core 135 :   0.00%
+ core 136 :   0.00%
+ core 137 :   0.00%
+ core 138 :   0.00%
+ core 139 :   0.00%
+ core 140 :   0.00%
+ core 141 :   0.00%
+ core 142 :   0.00%
+ core 143 :   0.00%
+ core 144 :   0.00%
+ core 145 :   0.00%
+ core 146 :   0.00%
+ core 147 :   0.00%
+ core 148 :   0.00%
+ core 149 :   0.00%
+ core 150 :   0.00%
+ core 151 :   0.00%
+ core 152 :   0.00%
+ core 153 :   0.00%
+ core 154 :   0.00%
+ core 155 :   0.00%
+ core 156 :   0.00%
+ core 157 :   0.00%
+ core 158 :   0.00%
+ core 159 :   0.00%
+ core 160 :   0.00%
+ core 161 :   0.00%
+ core 162 :   0.00%
+ core 163 :   0.00%
+ core 164 :   0.00%
+ core 165 :   0.00%
+ core 166 :   0.00%
+ core 167 :   0.00%
+ core 168 :   0.00%
+ core 169 :   0.00%
+ core 170 :   0.00%
+ core 171 :   0.00%
+ core 172 :   0.00%
+ core 173 :   0.00%
+ core 174 :   0.00%
+ core 175 :   0.00%
+ core 176 :   0.00%
+ core 177 :   0.00%
+ core 178 :   0.00%
+ core 179 :   0.00%
+ core 180 :   0.00%
+ core 181 :   0.00%
+ core 182 :   0.00%
+ core 183 :   0.00%
+ core 184 :   0.00%
+ core 185 :   0.00%
+ core 186 :   0.00%
+ core 187 :   0.00%
+ core 188 :   0.00%
+ core 189 :   0.00%
+ core 190 :   0.00%
+ core 191 :   0.00%
+ CPU temp : 43.00 °C
+ thread  0 pinned->cpu 0 : ops_total=881299 target=60.0%
+
+=== time: 3s elapsed (0s remaining) ===
+ core  0 :  61.00%
+ core  1 :   0.00%
+ core  2 :   0.00%
+ core  3 :   0.00%
+ core  4 :   0.00%
+ core  5 :   0.00%
+ core  6 :   0.00%
+ core  7 :   0.00%
+ core  8 :   0.00%
+ core  9 :   0.00%
+ core 10 :   0.00%
+ core 11 :   0.00%
+ core 12 :   0.00%
+ core 13 :   0.00%
+ core 14 :   0.00%
+ core 15 :   0.00%
+ core 16 :   0.00%
+ core 17 :   0.00%
+ core 18 :   0.00%
+ core 19 :   0.00%
+ core 20 :   0.00%
+ core 21 :   0.00%
+ core 22 :   0.00%
+ core 23 :   0.00%
+ core 24 :   0.00%
+ core 25 :   0.00%
+ core 26 :   0.00%
+ core 27 :   0.00%
+ core 28 :   0.00%
+ core 29 :   0.00%
+ core 30 :   0.00%
+ core 31 :   0.00%
+ core 32 :   0.00%
+ core 33 :   0.99%
+ core 34 :   0.00%
+ core 35 :   0.00%
+ core 36 :   0.00%
+ core 37 :   0.00%
+ core 38 :   0.00%
+ core 39 :   0.00%
+ core 40 :   0.99%
+ core 41 :   0.00%
+ core 42 :   0.00%
+ core 43 :   0.00%
+ core 44 :   0.00%
+ core 45 :   0.00%
+ core 46 :   0.00%
+ core 47 :   0.00%
+ core 48 :   0.00%
+ core 49 :   0.00%
+ core 50 :   0.00%
+ core 51 :   0.99%
+ core 52 :   0.00%
+ core 53 :   0.00%
+ core 54 :   0.00%
+ core 55 :   0.00%
+ core 56 :   0.00%
+ core 57 :   0.00%
+ core 58 :   0.00%
+ core 59 :   0.00%
+ core 60 :   0.00%
+ core 61 :   0.00%
+ core 62 :   0.00%
+ core 63 :   0.00%
+ core 64 :   0.00%
+ core 65 :   0.00%
+ core 66 :   0.00%
+ core 67 :   0.00%
+ core 68 :   0.00%
+ core 69 :   0.00%
+ core 70 :   0.00%
+ core 71 :   0.00%
+ core 72 :   0.00%
+ core 73 :   0.00%
+ core 74 :   0.00%
+ core 75 :   0.00%
+ core 76 :   0.00%
+ core 77 :   0.00%
+ core 78 :   0.00%
+ core 79 :   0.00%
+ core 80 :   0.00%
+ core 81 :   0.00%
+ core 82 :   0.00%
+ core 83 :   0.00%
+ core 84 :   0.00%
+ core 85 :   0.00%
+ core 86 :   0.00%
+ core 87 :   0.00%
+ core 88 :   0.00%
+ core 89 :   0.00%
+ core 90 :   0.00%
+ core 91 :   0.00%
+ core 92 :   0.00%
+ core 93 :   0.00%
+ core 94 :   0.00%
+ core 95 :   0.00%
+ core 96 :   0.00%
+ core 97 :   0.00%
+ core 98 :   0.00%
+ core 99 :   0.00%
+ core 100 :   0.00%
+ core 101 :   0.00%
+ core 102 :   0.00%
+ core 103 :   0.00%
+ core 104 :   0.00%
+ core 105 :   0.00%
+ core 106 :   0.00%
+ core 107 :   0.00%
+ core 108 :   0.00%
+ core 109 :   0.00%
+ core 110 :   0.00%
+ core 111 :   0.00%
+ core 112 :   0.00%
+ core 113 :   0.00%
+ core 114 :   0.00%
+ core 115 :   0.00%
+ core 116 :   0.00%
+ core 117 :   0.00%
+ core 118 :   0.00%
+ core 119 :   0.00%
+ core 120 :   0.00%
+ core 121 :   0.00%
+ core 122 :   0.00%
+ core 123 :   0.00%
+ core 124 :   0.00%
+ core 125 :   0.00%
+ core 126 :   0.00%
+ core 127 :   0.00%
+ core 128 :   0.00%
+ core 129 :   0.00%
+ core 130 :   0.00%
+ core 131 :   0.00%
+ core 132 :   0.00%
+ core 133 :   0.00%
+ core 134 :   0.00%
+ core 135 :   0.00%
+ core 136 :   0.00%
+ core 137 :   0.00%
+ core 138 :   0.00%
+ core 139 :   0.00%
+ core 140 :   0.00%
+ core 141 :   0.00%
+ core 142 :   0.00%
+ core 143 :   0.00%
+ core 144 :   0.00%
+ core 145 :   0.00%
+ core 146 :   0.00%
+ core 147 :   0.00%
+ core 148 :   0.00%
+ core 149 :   0.00%
+ core 150 :   0.00%
+ core 151 :   0.00%
+ core 152 :   0.00%
+ core 153 :   0.00%
+ core 154 :   0.00%
+ core 155 :   0.00%
+ core 156 :   0.00%
+ core 157 :   0.00%
+ core 158 :   0.00%
+ core 159 :   0.00%
+ core 160 :   0.00%
+ core 161 :   0.00%
+ core 162 :   0.00%
+ core 163 :   0.00%
+ core 164 :   0.00%
+ core 165 :   0.00%
+ core 166 :   0.00%
+ core 167 :   0.00%
+ core 168 :   0.00%
+ core 169 :   0.00%
+ core 170 :   0.00%
+ core 171 :   0.00%
+ core 172 :   0.00%
+ core 173 :   0.00%
+ core 174 :   0.00%
+ core 175 :   0.00%
+ core 176 :   0.00%
+ core 177 :   0.00%
+ core 178 :   0.00%
+ core 179 :   0.00%
+ core 180 :   0.00%
+ core 181 :   0.00%
+ core 182 :   0.00%
+ core 183 :   0.00%
+ core 184 :   0.00%
+ core 185 :   0.00%
+ core 186 :   0.00%
+ core 187 :   0.00%
+ core 188 :   0.00%
+ core 189 :   0.00%
+ core 190 :   0.00%
+ core 191 :   0.00%
+ CPU temp : 43.00 °C
+ thread  0 pinned->cpu 0 : ops_total=1217749 target=60.0%
+
+=== SUMMARY ===
+ core  0 : last_total=954958 last_idle=930732
+ core  1 : last_total=958498 last_idle=937336
+ core  2 : last_total=958661 last_idle=943851
+ core  3 : last_total=958880 last_idle=944102
+ core  4 : last_total=958794 last_idle=937833
+ core  5 : last_total=958838 last_idle=943941
+ core  6 : last_total=958991 last_idle=944223
+ core  7 : last_total=958961 last_idle=944162
+ core  8 : last_total=958924 last_idle=943512
+ core  9 : last_total=958979 last_idle=944168
+ core 10 : last_total=958967 last_idle=944135
+ core 11 : last_total=958953 last_idle=944120
+ core 12 : last_total=958941 last_idle=944106
+ core 13 : last_total=958953 last_idle=944088
+ core 14 : last_total=958916 last_idle=943880
+ core 15 : last_total=958935 last_idle=943946
+ core 16 : last_total=958929 last_idle=943926
+ core 17 : last_total=958976 last_idle=944087
+ core 18 : last_total=958668 last_idle=943627
+ core 19 : last_total=958955 last_idle=943938
+ core 20 : last_total=958835 last_idle=943956
+ core 21 : last_total=958870 last_idle=943929
+ core 22 : last_total=958966 last_idle=944111
+ core 23 : last_total=958957 last_idle=944027
+ core 24 : last_total=958838 last_idle=943972
+ core 25 : last_total=958986 last_idle=944236
+ core 26 : last_total=958923 last_idle=944174
+ core 27 : last_total=958940 last_idle=943957
+ core 28 : last_total=958925 last_idle=944146
+ core 29 : last_total=958973 last_idle=944234
+ core 30 : last_total=958980 last_idle=944235
+ core 31 : last_total=958958 last_idle=944070
+ core 32 : last_total=958702 last_idle=932880
+ core 33 : last_total=958939 last_idle=944166
+ core 34 : last_total=958963 last_idle=944242
+ core 35 : last_total=958985 last_idle=944244
+ core 36 : last_total=958934 last_idle=944214
+ core 37 : last_total=958971 last_idle=944247
+ core 38 : last_total=958759 last_idle=943986
+ core 39 : last_total=958990 last_idle=944260
+ core 40 : last_total=958946 last_idle=944218
+ core 41 : last_total=958980 last_idle=944264
+ core 42 : last_total=958995 last_idle=944266
+ core 43 : last_total=958995 last_idle=944264
+ core 44 : last_total=958970 last_idle=944206
+ core 45 : last_total=958995 last_idle=944272
+ core 46 : last_total=958995 last_idle=944283
+ core 47 : last_total=958993 last_idle=944257
+ core 48 : last_total=958839 last_idle=943911
+ core 49 : last_total=958791 last_idle=944080
+ core 50 : last_total=958993 last_idle=944274
+ core 51 : last_total=958993 last_idle=944273
+ core 52 : last_total=958966 last_idle=944252
+ core 53 : last_total=958874 last_idle=944166
+ core 54 : last_total=958997 last_idle=944289
+ core 55 : last_total=958994 last_idle=944276
+ core 56 : last_total=958820 last_idle=943920
+ core 57 : last_total=958804 last_idle=943814
+ core 58 : last_total=958881 last_idle=944154
+ core 59 : last_total=958965 last_idle=944254
+ core 60 : last_total=958851 last_idle=943844
+ core 61 : last_total=958917 last_idle=944205
+ core 62 : last_total=958916 last_idle=944205
+ core 63 : last_total=958943 last_idle=944233
+ core 64 : last_total=953847 last_idle=933847
+ core 65 : last_total=958049 last_idle=938566
+ core 66 : last_total=958383 last_idle=943421
+ core 67 : last_total=958396 last_idle=943659
+ core 68 : last_total=958929 last_idle=944150
+ core 69 : last_total=958849 last_idle=944074
+ core 70 : last_total=958979 last_idle=944260
+ core 71 : last_total=958927 last_idle=944027
+ core 72 : last_total=958774 last_idle=943973
+ core 73 : last_total=958896 last_idle=944121
+ core 74 : last_total=958995 last_idle=944280
+ core 75 : last_total=958977 last_idle=944193
+ core 76 : last_total=958976 last_idle=944245
+ core 77 : last_total=958994 last_idle=944280
+ core 78 : last_total=958990 last_idle=944239
+ core 79 : last_total=958986 last_idle=944221
+ core 80 : last_total=958874 last_idle=943978
+ core 81 : last_total=958966 last_idle=944221
+ core 82 : last_total=958995 last_idle=944297
+ core 83 : last_total=958994 last_idle=944285
+ core 84 : last_total=958973 last_idle=944181
+ core 85 : last_total=958963 last_idle=944192
+ core 86 : last_total=958853 last_idle=943863
+ core 87 : last_total=958925 last_idle=944110
+ core 88 : last_total=958969 last_idle=944216
+ core 89 : last_total=958904 last_idle=944140
+ core 90 : last_total=958995 last_idle=944299
+ core 91 : last_total=958932 last_idle=944129
+ core 92 : last_total=958980 last_idle=944268
+ core 93 : last_total=958964 last_idle=944196
+ core 94 : last_total=958995 last_idle=944283
+ core 95 : last_total=958992 last_idle=944263
+ core 96 : last_total=958979 last_idle=944262
+ core 97 : last_total=958991 last_idle=944275
+ core 98 : last_total=958993 last_idle=944301
+ core 99 : last_total=958986 last_idle=944247
+ core 100 : last_total=958974 last_idle=944263
+ core 101 : last_total=958994 last_idle=944283
+ core 102 : last_total=958994 last_idle=944288
+ core 103 : last_total=958983 last_idle=944214
+ core 104 : last_total=958974 last_idle=944267
+ core 105 : last_total=958993 last_idle=944300
+ core 106 : last_total=958988 last_idle=944285
+ core 107 : last_total=958980 last_idle=944258
+ core 108 : last_total=958938 last_idle=944218
+ core 109 : last_total=958936 last_idle=944217
+ core 110 : last_total=958954 last_idle=944239
+ core 111 : last_total=958981 last_idle=944281
+ core 112 : last_total=958895 last_idle=944121
+ core 113 : last_total=958962 last_idle=944162
+ core 114 : last_total=958960 last_idle=944259
+ core 115 : last_total=958992 last_idle=944298
+ core 116 : last_total=958940 last_idle=944029
+ core 117 : last_total=958914 last_idle=944200
+ core 118 : last_total=958926 last_idle=944209
+ core 119 : last_total=958989 last_idle=944271
+ core 120 : last_total=958745 last_idle=943932
+ core 121 : last_total=958912 last_idle=943973
+ core 122 : last_total=958955 last_idle=944165
+ core 123 : last_total=958980 last_idle=944222
+ core 124 : last_total=958926 last_idle=944061
+ core 125 : last_total=958967 last_idle=944104
+ core 126 : last_total=958977 last_idle=944187
+ core 127 : last_total=958940 last_idle=943800
+ core 128 : last_total=958744 last_idle=943459
+ core 129 : last_total=958789 last_idle=943419
+ core 130 : last_total=958943 last_idle=944049
+ core 131 : last_total=958949 last_idle=944125
+ core 132 : last_total=958835 last_idle=943591
+ core 133 : last_total=958917 last_idle=943945
+ core 134 : last_total=958937 last_idle=944062
+ core 135 : last_total=958949 last_idle=944012
+ core 136 : last_total=958937 last_idle=944064
+ core 137 : last_total=958973 last_idle=944180
+ core 138 : last_total=958931 last_idle=943919
+ core 139 : last_total=958943 last_idle=944000
+ core 140 : last_total=958919 last_idle=944031
+ core 141 : last_total=958972 last_idle=944202
+ core 142 : last_total=958941 last_idle=944079
+ core 143 : last_total=958902 last_idle=943865
+ core 144 : last_total=958928 last_idle=944073
+ core 145 : last_total=958953 last_idle=944152
+ core 146 : last_total=958845 last_idle=943884
+ core 147 : last_total=958797 last_idle=943816
+ core 148 : last_total=958859 last_idle=943858
+ core 149 : last_total=958872 last_idle=943915
+ core 150 : last_total=958970 last_idle=944175
+ core 151 : last_total=958970 last_idle=944194
+ core 152 : last_total=958941 last_idle=944046
+ core 153 : last_total=958973 last_idle=944191
+ core 154 : last_total=958970 last_idle=944202
+ core 155 : last_total=958949 last_idle=944049
+ core 156 : last_total=958882 last_idle=943878
+ core 157 : last_total=958819 last_idle=943868
+ core 158 : last_total=958882 last_idle=944098
+ core 159 : last_total=958929 last_idle=943977
+ core 160 : last_total=958891 last_idle=939987
+ core 161 : last_total=958855 last_idle=943648
+ core 162 : last_total=958948 last_idle=944037
+ core 163 : last_total=958949 last_idle=944073
+ core 164 : last_total=958917 last_idle=943872
+ core 165 : last_total=958892 last_idle=942155
+ core 166 : last_total=958940 last_idle=943888
+ core 167 : last_total=958828 last_idle=943084
+ core 168 : last_total=958803 last_idle=943716
+ core 169 : last_total=958742 last_idle=943758
+ core 170 : last_total=958943 last_idle=944067
+ core 171 : last_total=958916 last_idle=943815
+ core 172 : last_total=958907 last_idle=943957
+ core 173 : last_total=958930 last_idle=944016
+ core 174 : last_total=958928 last_idle=944012
+ core 175 : last_total=958914 last_idle=943895
+ core 176 : last_total=958893 last_idle=943962
+ core 177 : last_total=958926 last_idle=944076
+ core 178 : last_total=958973 last_idle=944226
+ core 179 : last_total=958922 last_idle=943960
+ core 180 : last_total=958905 last_idle=943969
+ core 181 : last_total=958873 last_idle=942591
+ core 182 : last_total=958964 last_idle=944189
+ core 183 : last_total=958931 last_idle=943958
+ core 184 : last_total=958929 last_idle=944064
+ core 185 : last_total=958915 last_idle=944010
+ core 186 : last_total=958879 last_idle=943824
+ core 187 : last_total=958874 last_idle=943857
+ core 188 : last_total=958900 last_idle=943184
+ core 189 : last_total=958939 last_idle=944069
+ core 190 : last_total=958939 last_idle=944064
+ core 191 : last_total=958845 last_idle=943613
+ Final CPU temp : 42.00 °C
+ Threads: 1  Duration requested: 3 s  Time elapsed: 3s
+ thread  0 pinned->cpu 0 : total ops=1217749

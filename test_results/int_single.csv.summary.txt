@@ -1,0 +1,9 @@
+cpustress summary
+mode=single
+workload=INT
+util=50.0
+threads=1
+duration_requested=3
+time_elapsed=3
+final_temp=41.00
+thread00_cpu00_ops=760490
