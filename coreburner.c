@@ -17,7 +17,6 @@
  * Build:
  *   gcc -O2 -march=native -pthread -std=c11 -Wall -Wextra -o coreburner coreburner.c -lm
  *
- * Author: ChatGPT (patched)
  */
 
  /*******************************************************
