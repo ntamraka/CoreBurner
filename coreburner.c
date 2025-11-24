@@ -480,8 +480,14 @@ int safe_fprintf_flush(FILE *f, const char *fmt, ...) {
  ***********************************************************/
 void print_usage(const char *prog) {
     fprintf(stderr,
-        "Usage: %s --mode single|multi --util N(10-100) "
+        "Usage: %s --mode single|multi|single-core-multi --util N(10-100) "
         "--duration X[s|m|h] --type INT|FLOAT|AVX|MIXED [options]\n"
+        "\n"
+        "Modes:\n"
+        "  single              Single thread on one core\n"
+        "  multi               One thread per available core\n"
+        "  single-core-multi   Multiple threads on a single core\n"
+        "\n"
         "Options:\n"
         "  --max-threads N          Max worker threads (default %d)\n"
         "  --duration-limit X       Upper allowed duration (default 24h)\n"
@@ -489,6 +495,10 @@ void print_usage(const char *prog) {
         "  --log FILE               Write CSV log to FILE\n"
         "  --log-interval N         Log/report interval (default %d sec)\n"
         "  --log-append             Append instead of overwrite\n"
+        "\n"
+        "Single-Core Multi-Thread Options:\n"
+        "  --single-core-id N       CPU core ID to pin threads (default 0)\n"
+        "  --single-core-threads N  Number of threads on single core (default 2)\n"
         "\n"
         "CPU Frequency / Governor (requires root):\n"
         "  --set-governor GOV       Set CPU governor\n"
@@ -536,7 +546,8 @@ int parse_args(
     char **out_set_governor, long *out_set_min_freq, long *out_set_max_freq,
     char **out_freq_table,
     int *out_dynamic_freq,
-    char **out_mixed_ratio)
+    char **out_mixed_ratio,
+    int *out_single_core_id, int *out_single_core_threads)
 {
     *out_mode = NULL;
     *out_util = -1;
@@ -559,6 +570,9 @@ int parse_args(
 
     *out_dynamic_freq = 0;
     *out_mixed_ratio  = NULL;
+    
+    *out_single_core_id = 0;
+    *out_single_core_threads = 2;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--mode") == 0 && i + 1 < argc) {
@@ -645,6 +659,16 @@ int parse_args(
 
         if (strcmp(argv[i], "--mixed-ratio") == 0 && i + 1 < argc) {
             *out_mixed_ratio = argv[++i];
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--single-core-id") == 0 && i + 1 < argc) {
+            *out_single_core_id = atoi(argv[++i]);
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--single-core-threads") == 0 && i + 1 < argc) {
+            *out_single_core_threads = atoi(argv[++i]);
             continue;
         }
 
@@ -793,7 +817,9 @@ int validate_environment(
     char **temp_path,
     double temp_threshold,
     int wants_cpufreq_write,
-    const char *mixed_ratio_str)
+    const char *mixed_ratio_str,
+    int single_core_id,
+    int single_core_threads)
 {
     if (access("/proc/stat", R_OK) != 0) {
         fprintf(stderr, "Error: /proc/stat not readable\n");
@@ -804,7 +830,27 @@ int validate_environment(
     int affinity = get_affinity_cpu_count();
     g_available_cpus = affinity;
 
-    int nthreads = str_case_equal(mode, "single") ? 1 : affinity;
+    int nthreads;
+    if (str_case_equal(mode, "single")) {
+        nthreads = 1;
+    } else if (str_case_equal(mode, "single-core-multi")) {
+        /* Validate single-core-multi parameters */
+        if (single_core_id < 0 || single_core_id >= affinity) {
+            fprintf(stderr,
+                    "Error: --single-core-id=%d is out of range (0-%d)\n",
+                    single_core_id, affinity - 1);
+            return -1;
+        }
+        if (single_core_threads <= 0 || single_core_threads > max_threads) {
+            fprintf(stderr,
+                    "Error: --single-core-threads=%d must be 1-%d\n",
+                    single_core_threads, max_threads);
+            return -1;
+        }
+        nthreads = single_core_threads;
+    } else {
+        nthreads = affinity;
+    }
 
     /* NEW BEHAVIOR: Clamp instead of error */
     if (nthreads > max_threads) {
@@ -987,7 +1033,8 @@ int main_runtime(
     long *current_max_freq,
     char **temp_path_ptr,
     worker_arg_t **out_wargs,
-    pthread_t **out_tids)
+    pthread_t **out_tids,
+    int single_core_id)
 {
     /* allocate worker structures */
     pthread_t *tids = calloc(nthreads, sizeof(pthread_t));
@@ -998,7 +1045,12 @@ int main_runtime(
     }
 
     for (int i = 0; i < nthreads; ++i) {
-        wargs[i].cpu_id = i % g_available_cpus;
+        /* For single-core-multi mode, all threads go to the same core */
+        if (str_case_equal(mode, "single-core-multi")) {
+            wargs[i].cpu_id = single_core_id;
+        } else {
+            wargs[i].cpu_id = i % g_available_cpus;
+        }
         wargs[i].target_util = util;
         wargs[i].type = type;
         __atomic_store_n(&wargs[i].ops_done, 0, __ATOMIC_RELAXED);
@@ -1263,6 +1315,8 @@ int main(int argc, char **argv)
 
     int dynamic_freq = 0;
     char *mixed_ratio_str = NULL;
+    int single_core_id = 0;
+    int single_core_threads = 2;
 
     /* Parse CLI */
     if (parse_args(
@@ -1275,7 +1329,8 @@ int main(int argc, char **argv)
             &set_governor, &set_min_freq, &set_max_freq,
             &freq_table_str,
             &dynamic_freq,
-            &mixed_ratio_str) != 0)
+            &mixed_ratio_str,
+            &single_core_id, &single_core_threads) != 0)
     {
         return 1;
     }
@@ -1300,7 +1355,9 @@ if (validate_environment(
         &temp_path,
         temp_threshold,
         wants_cpufreq_write,
-        mixed_ratio_str
+        mixed_ratio_str,
+        single_core_id,
+        single_core_threads
     ) != 0)
 {
     free(temp_path);
@@ -1336,6 +1393,10 @@ if (validate_environment(
 
         if (mixed_ratio_str)
             printf("  Mixed ratio     : %s\n", mixed_ratio_str);
+        
+        if (str_case_equal(mode, "single-core-multi"))
+            printf("  Single core ID  : %d (with %d threads)\n",
+                   single_core_id, single_core_threads);
 
         if (log_path)
             printf("  Log file        : %s\n", log_path);
@@ -1429,7 +1490,8 @@ if (validate_environment(
                 current_max_freq,
                 &temp_path,
                 &wargs,
-                &tids
+                &tids,
+                single_core_id
             );
 
     /***************************************************************
