@@ -11,7 +11,7 @@ It includes advanced workloads (INT / FLOAT / AVX / MIXED), full thread pinning,
 ##Features
 
 ###  Workload Engine
-- Single-thread & multi-thread modes
+- Single-thread, multi-thread & single-core multi-thread modes
 - Per-thread CPU pinning
 - Workload types:
   - `INT`
@@ -76,6 +76,17 @@ This runs one worker per core at 75% utilization using AVX instructions and logs
   --duration 2m --type AVX --log run.csv
 
 ```
+
+### Single core with multiple threads (SMT/Hyperthreading test)
+
+This runs 4 threads on CPU core 0 at 90% utilization to test thread contention and SMT performance.
+
+```bash
+./coreburner --mode single-core-multi --single-core-id 0 \
+  --single-core-threads 4 --util 90 --duration 1m \
+  --type MIXED --mixed-ratio 3:2:1 --log smt_test.csv
+```
+
 ###Governor control + max frequency test
 
 Requires root. Sets governor to performance, caps max frequency at 3.4 GHz, and runs INT workload.
