@@ -11,7 +11,8 @@ It includes advanced workloads (INT / FLOAT / AVX / MIXED), full thread pinning,
 ##Features
 
 ###  Workload Engine
-- Single-thread, multi-thread & single-core multi-thread modes
+- Single-thread & multi-thread modes
+- **Single-core multi-threaded mode** (for hyperthreading/SMT testing)
 - Per-thread CPU pinning
 - Workload types:
   - `INT`
