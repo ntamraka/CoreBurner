@@ -1793,8 +1793,7 @@ if (validate_environment(
                 nthreads,
                 temp_threshold,
                 log_path,
-                log_interval,ls
-
+                log_interval,
                 log_append,
                 dynamic_freq,
                 current_max_freq,
