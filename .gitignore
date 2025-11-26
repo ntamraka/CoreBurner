@@ -1,0 +1,28 @@
+# Log directory - contains timestamped CSV logs
+log/
+
+# Results CSV file
+results.csv
+
+# Compiled binary
+coreburner
+cpu_id
+target_util
+
+# Object files
+*.o
+*.a
+
+# Test results
+test_results/
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
