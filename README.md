@@ -130,3 +130,58 @@ sudo ./coreburner --mode multi --util 100 \
   --duration 3m --dynamic-freq --temp-threshold 85
 ```
 
+---
+
+## Verifying SIMD Instruction Usage
+
+### Quick Check
+```bash
+# Show CPU capabilities and recommended workload
+./coreburner --check-simd
+
+# Auto-detect and use best SIMD level
+./coreburner --mode multi --util 50 --duration 10 --type AUTO
+```
+
+### Comprehensive Verification
+```bash
+# Run verification script
+./verify_simd.sh
+
+# Check CPU flags
+lscpu | grep -i flags
+cat /proc/cpuinfo | grep flags | head -1
+
+# Inspect binary for SIMD instructions
+objdump -d coreburner | grep 'ymm'   # AVX/AVX2 (256-bit)
+objdump -d coreburner | grep 'zmm'   # AVX-512 (512-bit)
+objdump -d coreburner | grep vfmadd  # FMA instructions
+
+# Look for specific work units
+objdump -d coreburner | grep -A 20 '<avx2_work_unit>:'
+```
+
+### Runtime Profiling with perf
+```bash
+# Basic profiling (requires root)
+sudo perf stat ./coreburner --mode multi --util 50 --duration 10 --type AVX2
+
+# Detailed instruction analysis
+sudo perf record -e cycles,instructions ./coreburner --mode multi --util 50 --duration 10 --type AVX2
+sudo perf report
+
+# SIMD-specific events (Intel CPUs)
+sudo perf stat -e fp_arith_inst_retired.256b_packed_single,fp_arith_inst_retired.256b_packed_double ./coreburner --mode multi --util 50 --duration 10 --type AVX2
+
+# Check FMA usage
+sudo perf stat -e fp_arith_inst_retired.scalar_single,fp_arith_inst_retired.256b_packed_single ./coreburner --mode multi --util 50 --duration 10 --type AVX2
+```
+
+### What to Look For
+- **SSE (128-bit)**: `xmm` registers, instructions like `movaps`, `mulps`, `addps`
+- **AVX (256-bit)**: `ymm` registers, instructions like `vmovaps`, `vmulps`, `vaddps`
+- **AVX2 (256-bit + FMA)**: `vfmadd` (fused multiply-add), `vbroadcastss`, integer vector ops
+- **AVX-512 (512-bit)**: `zmm` registers, instructions like `vmulps %zmm`
+
+---
+

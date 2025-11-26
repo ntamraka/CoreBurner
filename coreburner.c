@@ -288,6 +288,9 @@ typedef enum {
     W_AUTO 
 } workload_t;
 
+/* Forward declarations */
+void print_cpu_simd_capabilities();
+
 /* INT workload */
 void int_work_unit(volatile uint64_t *state) {
     uint64_t x = *state;
@@ -743,6 +746,11 @@ int parse_args(
             continue;
         }
 
+        if (strcmp(argv[i], "--check-simd") == 0) {
+            print_cpu_simd_capabilities();
+            exit(0);
+        }
+
         if (strcmp(argv[i], "--log") == 0 && i + 1 < argc) {
             *out_log_path = argv[++i];
             continue;
@@ -932,6 +940,90 @@ int parse_mixed_ratio(const char *s, mixed_ratio_t *mr) {
     mr->total   = total;
 
     return 0;
+}
+
+/***********************************************************
+ *        CPU SIMD Capabilities Display & Verification
+ ***********************************************************/
+void print_cpu_simd_capabilities() {
+    printf("\n=== CPU SIMD Capabilities ===");
+    printf("\n CPU Architecture Support:");
+    
+#if defined(__x86_64__)
+    printf("\n  Architecture    : x86_64 (64-bit)");
+#elif defined(__i386__)
+    printf("\n  Architecture    : i386 (32-bit)");
+#else
+    printf("\n  Architecture    : Non-x86 (SIMD detection unavailable)");
+#endif
+
+#if defined(__x86_64__) || defined(__i386__)
+    int has_sse = cpu_supports_sse();
+    int has_avx = cpu_supports_avx();
+    int has_avx2 = cpu_supports_avx2();
+    int has_avx512 = cpu_supports_avx512();
+    
+    printf("\n  SSE4.2          : %s", has_sse ? "✓ YES" : "✗ NO");
+    printf("\n  AVX (256-bit)   : %s", has_avx ? "✓ YES" : "✗ NO");
+    printf("\n  AVX2 + FMA      : %s", has_avx2 ? "✓ YES" : "✗ NO");
+    printf("\n  AVX-512         : %s", has_avx512 ? "✓ YES" : "✗ NO");
+    
+    printf("\n\n Recommended Workload Types:");
+    if (has_avx512)
+        printf("\n  Best            : --type AVX512 (512-bit vectors)");
+    else if (has_avx2)
+        printf("\n  Best            : --type AVX2 (256-bit with FMA)");
+    else if (has_avx)
+        printf("\n  Best            : --type AVX (256-bit floating point)");
+    else if (has_sse)
+        printf("\n  Best            : --type SSE (128-bit vectors)");
+    else
+        printf("\n  Best            : --type FLOAT or INT (scalar only)");
+    
+    printf("\n  Auto-detect     : --type AUTO (will select best available)");
+#endif
+    
+    printf("\n\n Compile-time Flags:");
+#ifdef __SSE4_2__
+    printf("\n  __SSE4_2__      : Defined (SSE4.2 instructions enabled)");
+#endif
+#ifdef __AVX__
+    printf("\n  __AVX__         : Defined (AVX instructions enabled)");
+#endif
+#ifdef __AVX2__
+    printf("\n  __AVX2__        : Defined (AVX2 instructions enabled)");
+#endif
+#ifdef __FMA__
+    printf("\n  __FMA__         : Defined (FMA instructions enabled)");
+#endif
+#ifdef __AVX512F__
+    printf("\n  __AVX512F__     : Defined (AVX-512 instructions enabled)");
+#endif
+    
+    printf("\n\n Note: Compiled with -march=native enables all CPU-supported instructions");
+    
+    printf("\n\n=== Verification Methods ===");
+    printf("\n\n 1. Check CPU flags:");
+    printf("\n    $ lscpu | grep -i flags");
+    printf("\n    $ cat /proc/cpuinfo | grep flags | head -1");
+    printf("\n");
+    printf("\n 2. Profile with perf (requires root):");
+    printf("\n    $ sudo perf stat ./coreburner --mode multi --util 50 --duration 10 --type AVX2");
+    printf("\n");
+    printf("\n 3. Inspect binary for SIMD instructions:");
+    printf("\n    $ objdump -d coreburner | grep 'ymm'  # AVX/AVX2 (256-bit)");
+    printf("\n    $ objdump -d coreburner | grep 'zmm'  # AVX-512 (512-bit)");
+    printf("\n    $ objdump -d coreburner | grep 'xmm'  # SSE (128-bit)");
+    printf("\n");
+    printf("\n 4. Look for specific instructions:");
+    printf("\n    $ objdump -d coreburner | grep -E '(vfmadd|vmul|vadd)'");
+    printf("\n    - 'v' prefix = AVX family (vmulps, vaddpd, etc.)");
+    printf("\n    - 'vfmadd' = FMA instructions (AVX2)");
+    printf("\n    - 'ymm' registers = 256-bit vectors (AVX/AVX2)");
+    printf("\n    - 'zmm' registers = 512-bit vectors (AVX-512)");
+    printf("\n");
+    printf("\n 5. Use Intel VTune or AMD uProf for detailed profiling");
+    printf("\n\n");
 }
 
 /***********************************************************
@@ -1489,14 +1581,17 @@ int main_runtime(
     printf("\n=== SUMMARY ===\n");
     printf("\n--- Test Configuration ---\n");
     printf(" Mode            : %s\n", mode);
-    printf(" Workload        : %s\n",
-           (type==W_INT)?"INT":
-           (type==W_FLOAT)?"FLOAT":
-           (type==W_SSE)?"SSE":
-           (type==W_AVX)?"AVX":
-           (type==W_AVX2)?"AVX2":
-           (type==W_AVX512)?"AVX512":
-           (type==W_AUTO)?"AUTO":"MIXED");
+    
+    const char *workload_name = 
+        (type==W_INT)?"INT (Scalar Integer)":
+        (type==W_FLOAT)?"FLOAT (Scalar FP)":
+        (type==W_SSE)?"SSE (128-bit SIMD)":
+        (type==W_AVX)?"AVX (256-bit SIMD)":
+        (type==W_AVX2)?"AVX2 (256-bit SIMD + FMA)":
+        (type==W_AVX512)?"AVX512 (512-bit SIMD)":
+        (type==W_AUTO)?"AUTO":"MIXED";
+    
+    printf(" Workload        : %s\n", workload_name);
     printf(" Threads         : %d\n", nthreads);
     printf(" Target Util     : %.1f%%\n", util);
     printf(" Duration        : %ld s (elapsed: %ld s)\n", duration, elapsed);
