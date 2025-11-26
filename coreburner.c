@@ -1102,10 +1102,7 @@ int validate_environment(
  *  - Graceful shutdown & summary
  *******************************************************/
 
-/* Note:
- * Replace any earlier worker_thread() with this corrected version.
- * This implementation uses per-thread rand_r and g_mixed_ratio for MIXED.
- */
+
 
 void *worker_thread(void *arg) {
     worker_arg_t *w = (worker_arg_t *)arg;
@@ -1229,7 +1226,8 @@ int main_runtime(
     char **temp_path_ptr,
     worker_arg_t **out_wargs,
     pthread_t **out_tids,
-    int single_core_id)
+    int single_core_id,
+    double *out_avg_util)
 {
     /* allocate worker structures */
     pthread_t *tids = calloc(nthreads, sizeof(pthread_t));
@@ -1345,6 +1343,8 @@ int main_runtime(
     long freq_sum = 0;
     int temp_count = 0;
     int freq_count = 0;
+    double util_sum = 0.0;
+    int util_count = 0;
 
     /* dynamic freq tracking */
     if (dynamic_freq && current_max_freq) {
@@ -1392,6 +1392,8 @@ int main_runtime(
                 freq_sum += freqs[c];
                 freq_count++;
             }
+            util_sum += util_pct[c];
+            util_count++;
         }
 
         now = time(NULL);
@@ -1480,6 +1482,7 @@ int main_runtime(
     long elapsed = (long)(time(NULL) - start);
     double avg_temp = temp_count > 0 ? temp_sum / temp_count : 0.0;
     long avg_freq = freq_count > 0 ? freq_sum / freq_count : 0;
+    double avg_util = util_count > 0 ? util_sum / util_count : 0.0;
     double avg_ops_per_core = nthreads > 0 ? (double)total_ops / nthreads : 0.0;
     double total_ops_millions = total_ops / 1000000.0;
     
@@ -1499,6 +1502,11 @@ int main_runtime(
     printf(" Duration        : %ld s (elapsed: %ld s)\n", duration, elapsed);
     
     printf("\n--- Aggregate Statistics ---\n");
+    if (util_count > 0)
+        printf(" Avg Utilization : %.2f%%\n", avg_util);
+    else
+        printf(" Avg Utilization : N/A\n");
+    
     if (temp_count > 0)
         printf(" Avg Temperature : %.2f °C\n", avg_temp);
     else
@@ -1580,8 +1588,84 @@ int main_runtime(
     /* return allocated arrays to caller for potential further inspection */
     if (out_wargs) *out_wargs = wargs; else free(wargs);
     if (out_tids)  *out_tids  = tids;  else free(tids);
+    if (out_avg_util) *out_avg_util = avg_util;
 
     return 0;
+}
+
+/*******************************************************
+ *            Central Results CSV Logger
+ *******************************************************/
+void write_results_csv(
+    const char *mode,
+    workload_t type,
+    int nthreads,
+    double target_util,
+    long duration,
+    long elapsed,
+    double avg_util,
+    double avg_temp,
+    long avg_freq,
+    double total_ops_millions,
+    double ops_per_second,
+    const char *command_line,
+    time_t start_time)
+{
+    FILE *results = NULL;
+    int file_exists = (access("results.csv", F_OK) == 0);
+    
+    results = fopen("results.csv", "a");
+    if (!results) {
+        fprintf(stderr, "Warning: Could not open results.csv for writing\n");
+        return;
+    }
+    
+    /* Write header if file is new */
+    if (!file_exists) {
+        fprintf(results, "timestamp,date,time,mode,workload,threads,target_util,"
+                        "duration_sec,elapsed_sec,avg_util_pct,avg_temp_c,avg_freq_mhz,"
+                        "total_ops_millions,ops_per_sec_millions,avg_ops_per_core_millions,"
+                        "command\n");
+    }
+    
+    /* Format timestamp */
+    char date_str[32], time_str[32];
+    struct tm *tm_info = localtime(&start_time);
+    strftime(date_str, sizeof(date_str), "%Y-%m-%d", tm_info);
+    strftime(time_str, sizeof(time_str), "%H:%M:%S", tm_info);
+    
+    const char *workload_str = 
+        (type==W_INT)?"INT":
+        (type==W_FLOAT)?"FLOAT":
+        (type==W_SSE)?"SSE":
+        (type==W_AVX)?"AVX":
+        (type==W_AVX2)?"AVX2":
+        (type==W_AVX512)?"AVX512":
+        (type==W_AUTO)?"AUTO":"MIXED";
+    
+    double avg_ops_per_core = nthreads > 0 ? total_ops_millions / nthreads : 0.0;
+    
+    /* Write data row */
+    fprintf(results, "%ld,%s,%s,%s,%s,%d,%.1f,%ld,%ld,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,\"%s\"\n",
+            (long)start_time,
+            date_str,
+            time_str,
+            mode,
+            workload_str,
+            nthreads,
+            target_util,
+            duration,
+            elapsed,
+            avg_util,
+            avg_temp,
+            avg_freq / 1000.0,  /* Convert kHz to MHz */
+            total_ops_millions,
+            ops_per_second,
+            avg_ops_per_core,
+            command_line ? command_line : "N/A");
+    
+    fclose(results);
+    printf("\n✓ Results appended to results.csv\n");
 }
 
 /*******************************************************
@@ -1594,6 +1678,16 @@ int main_runtime(
 
 int main(int argc, char **argv)
 {
+    /* Capture command line for results.csv */
+    char command_line[2048] = {0};
+    int cmd_offset = 0;
+    for (int i = 0; i < argc && cmd_offset < (int)sizeof(command_line) - 10; i++) {
+        cmd_offset += snprintf(command_line + cmd_offset, 
+                              sizeof(command_line) - cmd_offset,
+                              "%s%s", i > 0 ? " " : "", argv[i]);
+    }
+    time_t start_timestamp = time(NULL);
+
     char *mode = NULL;
     double util = -1;
     long duration = -1;
@@ -1784,6 +1878,7 @@ if (validate_environment(
      ***************************************************************/
     worker_arg_t *wargs = NULL;
     pthread_t *tids = NULL;
+    double avg_util_actual = 0.0;
 
     int rc = main_runtime(
                 mode,
@@ -1800,8 +1895,59 @@ if (validate_environment(
                 &temp_path,
                 &wargs,
                 &tids,
-                single_core_id
+                single_core_id,
+                &avg_util_actual
             );
+
+    /***************************************************************
+     * Write results to central CSV file
+     ***************************************************************/
+    if (rc == 0 && wargs) {
+        /* Calculate statistics from completed run */
+        uint64_t total_ops = 0;
+        for (int t = 0; t < nthreads; ++t) {
+            total_ops += __atomic_load_n(&wargs[t].ops_done, __ATOMIC_RELAXED);
+        }
+        
+        long elapsed = (long)(time(NULL) - start_timestamp);
+        double total_ops_millions = total_ops / 1000000.0;
+        double ops_per_second = elapsed > 0 ? total_ops_millions / elapsed : 0.0;
+        
+        /* Read final temperature */
+        double final_temp = 0.0;
+        if (temp_path) {
+            double t = read_temperature(temp_path);
+            if (!isnan(t)) final_temp = t;
+        }
+        
+        /* Get average frequency (approximate from last known values) */
+        long avg_freq_approx = 0;
+        int freq_samples = 0;
+        for (int c = 0; c < g_available_cpus && c < 64; ++c) {
+            long hz = 0;
+            if (read_scaling_cur_freq(c, &hz) == 0 && hz > 0) {
+                avg_freq_approx += hz;
+                freq_samples++;
+            }
+        }
+        if (freq_samples > 0) avg_freq_approx /= freq_samples;
+        
+        write_results_csv(
+            mode,
+            type,
+            nthreads,
+            util,
+            duration,
+            elapsed,
+            avg_util_actual,
+            final_temp,
+            avg_freq_approx,
+            total_ops_millions,
+            ops_per_second,
+            command_line,
+            start_timestamp
+        );
+    }
 
     /***************************************************************
      * Cleanup

@@ -1,0 +1,2 @@
+timestamp,date,time,mode,workload,threads,target_util,duration_sec,elapsed_sec,avg_util_pct,avg_temp_c,avg_freq_mhz,total_ops_millions,ops_per_sec_millions,avg_ops_per_core_millions,command
+1764157893,2025-11-26,11:51:33,multi,AVX2,192,50.0,5,6,50.31,50.00,1824.51,3712.38,618.73,19.34,"./coreburner --mode multi --util 50 --duration 5 --type AVX2"
