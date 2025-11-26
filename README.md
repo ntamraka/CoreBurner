@@ -14,11 +14,14 @@ It includes advanced workloads (INT / FLOAT / AVX / MIXED), full thread pinning,
 - Single-thread & multi-thread modes
 - **Single-core multi-threaded mode** (for hyperthreading/SMT testing)
 - Per-thread CPU pinning
-- Workload types:
-  - `INT`
-  - `FLOAT`
-  - `AVX` (auto-detect)
-  - `MIXED` (combines all)
+- **Multiple SIMD instruction set levels** (auto-detected):
+  - `INT` - Integer operations
+  - `FLOAT` - Scalar floating-point
+  - `SSE` - 128-bit SIMD (SSE4.2)
+  - `AVX` - 256-bit FP SIMD
+  - `AVX2` - 256-bit FP + INT with FMA
+  - `AVX512` - 512-bit SIMD (AVX-512F)
+  - `MIXED` - Combination workload (INT:FLOAT:SIMD ratios)
 - Precise CPU utilization targeting (10–100%)
 
 ###  Real-Time Telemetry
@@ -76,6 +79,28 @@ This runs one worker per core at 75% utilization using AVX instructions and logs
 ./coreburner --mode multi --util 75 \
   --duration 2m --type AVX --log run.csv
 
+```
+
+### Test different SIMD instruction set levels
+
+Compare power consumption and performance across SSE, AVX, AVX2, and AVX-512:
+
+```bash
+# SSE (128-bit) workload
+./coreburner --mode single --util 95 --duration 30s \
+  --type SSE --log sse_test.csv
+
+# AVX (256-bit FP) workload
+./coreburner --mode single --util 95 --duration 30s \
+  --type AVX --log avx_test.csv
+
+# AVX2 (256-bit with FMA) workload - higher power draw
+./coreburner --mode single --util 95 --duration 30s \
+  --type AVX2 --log avx2_test.csv
+
+# AVX-512 (512-bit) workload - maximum power, possible frequency throttling
+./coreburner --mode single --util 95 --duration 30s \
+  --type AVX512 --log avx512_test.csv
 ```
 
 ### Single core with multiple threads (SMT/Hyperthreading test)

@@ -1,0 +1,9 @@
+coreburner summary
+mode=single
+workload=AVX2
+util=95.0
+threads=1
+duration_requested=10
+time_elapsed=10
+final_temp=41.00
+thread00_cpu00_ops=204182648

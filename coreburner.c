@@ -17,6 +17,7 @@
  * Build:
  *   gcc -O2 -march=native -pthread -std=c11 -Wall -Wextra -o coreburner coreburner.c -lm
  *
+ * Author: ChatGPT (patched)
  */
 
  /*******************************************************
@@ -276,7 +277,16 @@ int write_scaling_min_max(int cpu, long min_hz, long max_hz) {
 /***********************************************************
  *                      Work Units
  ***********************************************************/
-typedef enum { W_INT, W_FLOAT, W_AVX, W_MIXED } workload_t;
+typedef enum { 
+    W_INT, 
+    W_FLOAT, 
+    W_SSE, 
+    W_AVX, 
+    W_AVX2, 
+    W_AVX512, 
+    W_MIXED,
+    W_AUTO 
+} workload_t;
 
 /* INT workload */
 void int_work_unit(volatile uint64_t *state) {
@@ -302,7 +312,20 @@ void float_work_unit(volatile double *state) {
     *state = x;
 }
 
-/* AVX workload */
+/* SSE workload - 128-bit SIMD */
+void sse_work_unit(float *buf) {
+    __m128 a = _mm_loadu_ps(buf);
+    __m128 b = _mm_set1_ps(1.000001f);
+
+    for (int i = 0; i < 256; ++i) {
+        a = _mm_add_ps(a, b);
+        a = _mm_mul_ps(a, _mm_set1_ps(0.999999f));
+    }
+
+    _mm_storeu_ps(buf, a);
+}
+
+/* AVX workload - 256-bit FP only */
 void avx_work_unit(float *buf) {
     __m256 a = _mm256_loadu_ps(buf);
     __m256 b = _mm256_set1_ps(1.000001f);
@@ -313,6 +336,39 @@ void avx_work_unit(float *buf) {
     }
 
     _mm256_storeu_ps(buf, a);
+}
+
+/* AVX2 workload - 256-bit with FMA */
+void avx2_work_unit(float *buf) {
+    __m256 a = _mm256_loadu_ps(buf);
+    __m256 b = _mm256_set1_ps(1.000001f);
+    __m256 c = _mm256_set1_ps(0.999999f);
+
+    for (int i = 0; i < 256; ++i) {
+        /* FMA: a = a * c + b */
+        a = _mm256_fmadd_ps(a, c, b);
+    }
+
+    _mm256_storeu_ps(buf, a);
+}
+
+/* AVX-512 workload - 512-bit vectors */
+void avx512_work_unit(float *buf) {
+#ifdef __AVX512F__
+    __m512 a = _mm512_loadu_ps(buf);
+    __m512 b = _mm512_set1_ps(1.000001f);
+    __m512 c = _mm512_set1_ps(0.999999f);
+
+    for (int i = 0; i < 256; ++i) {
+        /* FMA: a = a * c + b */
+        a = _mm512_fmadd_ps(a, c, b);
+    }
+
+    _mm512_storeu_ps(buf, a);
+#else
+    /* Fallback to AVX2 if AVX-512 not available at compile time */
+    avx2_work_unit(buf);
+#endif
 }
 
 /*******************************************************
@@ -340,6 +396,20 @@ static int check_xgetbv_avx() {
 #endif
 }
 
+int cpu_supports_sse() {
+#if defined(__x86_64__) || defined(__i386__)
+    unsigned int eax, ebx, ecx, edx;
+
+    if (!__get_cpuid(1, &eax, &ebx, &ecx, &edx))
+        return 0;
+
+    /* Check for SSE4.2 (bit 20 of ECX) */
+    return (ecx >> 20) & 1;
+#else
+    return 0;
+#endif
+}
+
 int cpu_supports_avx() {
 #if defined(__x86_64__) || defined(__i386__)
     unsigned int eax, ebx, ecx, edx;
@@ -357,6 +427,59 @@ int cpu_supports_avx() {
         return 0;
 
     return 1;
+#else
+    return 0;
+#endif
+}
+
+int cpu_supports_avx2() {
+#if defined(__x86_64__) || defined(__i386__)
+    if (!cpu_supports_avx())
+        return 0;
+
+    unsigned int eax, ebx, ecx, edx;
+
+    /* Check CPUID leaf 7, subleaf 0 */
+    if (!__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx))
+        return 0;
+
+    /* AVX2 is bit 5 of EBX */
+    int has_avx2 = (ebx >> 5) & 1;
+    /* FMA is bit 12 of ECX from leaf 1 */
+    if (!__get_cpuid(1, &eax, &ebx, &ecx, &edx))
+        return 0;
+    int has_fma = (ecx >> 12) & 1;
+
+    return has_avx2 && has_fma;
+#else
+    return 0;
+#endif
+}
+
+int cpu_supports_avx512() {
+#if defined(__x86_64__) || defined(__i386__)
+    if (!cpu_supports_avx())
+        return 0;
+
+    unsigned int eax, ebx, ecx, edx;
+
+    /* Check CPUID leaf 7, subleaf 0 */
+    if (!__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx))
+        return 0;
+
+    /* AVX-512F (Foundation) is bit 16 of EBX */
+    int has_avx512f = (ebx >> 16) & 1;
+
+    if (!has_avx512f)
+        return 0;
+
+    /* Check XCR0 for ZMM state (bits 5-7) */
+    unsigned int xcr0_low, xcr0_high;
+    __asm__ volatile("xgetbv" : "=a"(xcr0_low), "=d"(xcr0_high) : "c"(0));
+    uint64_t xcr0 = ((uint64_t)xcr0_high << 32) | xcr0_low;
+
+    /* Bits 5, 6, 7 must be set for ZMM state */
+    return ((xcr0 & 0xE6ULL) == 0xE6ULL);
 #else
     return 0;
 #endif
@@ -481,7 +604,7 @@ int safe_fprintf_flush(FILE *f, const char *fmt, ...) {
 void print_usage(const char *prog) {
     fprintf(stderr,
         "Usage: %s --mode single|multi|single-core-multi --util N(10-100) "
-        "--duration X[s|m|h] --type INT|FLOAT|AVX|MIXED [options]\n"
+        "--duration X[s|m|h] --type AUTO|INT|FLOAT|SSE|AVX|AVX2|AVX512|MIXED [options]\n"
         "\n"
         "Modes:\n"
         "  single              Single thread on one core\n"
@@ -525,12 +648,17 @@ int str_case_equal(const char *a, const char *b) {
 }
 
 workload_t parse_type(const char *s) {
-    if (!s) return W_INT;
+    if (!s) return W_AUTO;
 
-    if (str_case_equal(s, "INT"))   return W_INT;
-    if (str_case_equal(s, "FLOAT")) return W_FLOAT;
-    if (str_case_equal(s, "AVX"))   return W_AVX;
-    return W_MIXED;
+    if (str_case_equal(s, "INT"))    return W_INT;
+    if (str_case_equal(s, "FLOAT"))  return W_FLOAT;
+    if (str_case_equal(s, "SSE"))    return W_SSE;
+    if (str_case_equal(s, "AVX"))    return W_AVX;
+    if (str_case_equal(s, "AVX2"))   return W_AVX2;
+    if (str_case_equal(s, "AVX512")) return W_AVX512;
+    if (str_case_equal(s, "MIXED"))  return W_MIXED;
+    if (str_case_equal(s, "AUTO"))   return W_AUTO;
+    return W_AUTO;
 }
 
 /***********************************************************
@@ -807,6 +935,30 @@ int parse_mixed_ratio(const char *s, mixed_ratio_t *mr) {
 }
 
 /***********************************************************
+ *             Auto-detect Best SIMD Level
+ ***********************************************************/
+workload_t auto_detect_best_simd() {
+    if (cpu_supports_avx512()) {
+        fprintf(stderr, "Auto-detected: AVX-512 (512-bit SIMD)\n");
+        return W_AVX512;
+    }
+    if (cpu_supports_avx2()) {
+        fprintf(stderr, "Auto-detected: AVX2 (256-bit with FMA)\n");
+        return W_AVX2;
+    }
+    if (cpu_supports_avx()) {
+        fprintf(stderr, "Auto-detected: AVX (256-bit FP)\n");
+        return W_AVX;
+    }
+    if (cpu_supports_sse()) {
+        fprintf(stderr, "Auto-detected: SSE (128-bit)\n");
+        return W_SSE;
+    }
+    fprintf(stderr, "Auto-detected: INT (no SIMD)\n");
+    return W_INT;
+}
+
+/***********************************************************
  *             Environment Validation
  ***********************************************************/
 int validate_environment(
@@ -864,10 +1016,39 @@ int validate_environment(
     if (nthreads > DEFAULT_MAX_THREADS)
         nthreads = DEFAULT_MAX_THREADS;
 
-    /* AVX safety check */
-    if ((type == W_AVX || type == W_MIXED) && !cpu_supports_avx()) {
+    /* SIMD capability checks (skip for AUTO as it's already validated) */
+    if (type == W_AUTO) {
+        /* AUTO type will be resolved to actual type before here */
+        return 0;
+    }
+    
+    if (type == W_SSE && !cpu_supports_sse()) {
+        fprintf(stderr,
+                "Error: CPU does not support SSE4.2.\n");
+        return -1;
+    }
+
+    if (type == W_AVX && !cpu_supports_avx()) {
         fprintf(stderr,
                 "Error: CPU or OS does not support AVX (XGETBV/xsave).\n");
+        return -1;
+    }
+
+    if (type == W_AVX2 && !cpu_supports_avx2()) {
+        fprintf(stderr,
+                "Error: CPU does not support AVX2 or FMA.\n");
+        return -1;
+    }
+
+    if (type == W_AVX512 && !cpu_supports_avx512()) {
+        fprintf(stderr,
+                "Error: CPU or OS does not support AVX-512F.\n");
+        return -1;
+    }
+
+    if (type == W_MIXED && !cpu_supports_avx()) {
+        fprintf(stderr,
+                "Error: MIXED mode requires AVX support.\n");
         return -1;
     }
 
@@ -953,8 +1134,15 @@ void *worker_thread(void *arg) {
     /* Local workload state */
     volatile uint64_t int_state = (uint64_t)(uintptr_t)w ^ 0xabcdef;
     volatile double float_state = (double)(w->cpu_id + 1) * 1.234567;
+    
+    /* Aligned buffers for SIMD operations */
+    float sse_buf[4] __attribute__((aligned(16)));
     float avx_buf[8] __attribute__((aligned(32)));
+    float avx512_buf[16] __attribute__((aligned(64)));
+    
+    for (int i = 0; i < 4; ++i) sse_buf[i] = (float)(i + w->cpu_id);
     for (int i = 0; i < 8; ++i) avx_buf[i] = (float)(i + w->cpu_id);
+    for (int i = 0; i < 16; ++i) avx512_buf[i] = (float)(i + w->cpu_id);
 
     /* RNG seed per-thread */
     unsigned int rnd_seed = (unsigned int)(time(NULL) ^ (uintptr_t)w ^ (w->cpu_id * 7919));
@@ -979,8 +1167,14 @@ void *worker_thread(void *arg) {
                     int_work_unit(&int_state);
                 } else if (w->type == W_FLOAT) {
                     float_work_unit(&float_state);
+                } else if (w->type == W_SSE) {
+                    sse_work_unit(sse_buf);
                 } else if (w->type == W_AVX) {
                     avx_work_unit(avx_buf);
+                } else if (w->type == W_AVX2) {
+                    avx2_work_unit(avx_buf);
+                } else if (w->type == W_AVX512) {
+                    avx512_work_unit(avx512_buf);
                 } else { /* W_MIXED with weights */
                     /* Use g_mixed_ratio to choose which unit to run */
                     int pick = 0;
@@ -991,13 +1185,14 @@ void *worker_thread(void *arg) {
                         } else if (pick < (g_mixed_ratio.r_int + g_mixed_ratio.r_float)) {
                             float_work_unit(&float_state);
                         } else {
-                            avx_work_unit(avx_buf);
+                            /* Use best available SIMD */
+                            avx2_work_unit(avx_buf);
                         }
                     } else {
                         /* fallback: 1:1:1 */
                         int_work_unit(&int_state);
                         float_work_unit(&float_state);
-                        avx_work_unit(avx_buf);
+                        avx2_work_unit(avx_buf);
                     }
                 }
 
@@ -1092,7 +1287,14 @@ int main_runtime(
                 time_t ts = time(NULL);
                 safe_fprintf_flush(logf, "# coreburner log\n");
                 safe_fprintf_flush(logf, "# mode=%s\n", mode);
-                safe_fprintf_flush(logf, "# workload=%s\n", (type == W_INT) ? "INT" : (type == W_FLOAT) ? "FLOAT" : (type == W_AVX) ? "AVX" : "MIXED");
+                safe_fprintf_flush(logf, "# workload=%s\n", 
+                    (type == W_INT) ? "INT" : 
+                    (type == W_FLOAT) ? "FLOAT" : 
+                    (type == W_SSE) ? "SSE" :
+                    (type == W_AVX) ? "AVX" : 
+                    (type == W_AVX2) ? "AVX2" :
+                    (type == W_AVX512) ? "AVX512" :
+                    (type == W_AUTO) ? "AUTO" : "MIXED");
                 safe_fprintf_flush(logf, "# util=%.1f\n", util);
                 safe_fprintf_flush(logf, "# threads=%d\n", nthreads);
                 safe_fprintf_flush(logf, "# interval=%ds\n", log_interval);
@@ -1138,6 +1340,12 @@ int main_runtime(
 
     int cores_to_log = (g_available_cpus > MAX_CORES_TO_LOG) ? MAX_CORES_TO_LOG : g_available_cpus;
 
+    /* Statistics tracking */
+    double temp_sum = 0.0;
+    long freq_sum = 0;
+    int temp_count = 0;
+    int freq_count = 0;
+
     /* dynamic freq tracking */
     if (dynamic_freq && current_max_freq) {
         for (int c = 0; c < g_available_cpus; ++c) {
@@ -1173,6 +1381,18 @@ int main_runtime(
 
         double tempC = NAN;
         if (temp_path_ptr && *temp_path_ptr) tempC = read_temperature(*temp_path_ptr);
+
+        /* Accumulate statistics */
+        if (!isnan(tempC)) {
+            temp_sum += tempC;
+            temp_count++;
+        }
+        for (int c = 0; c < cpus_read; ++c) {
+            if (freqs[c] > 0) {
+                freq_sum += freqs[c];
+                freq_count++;
+            }
+        }
 
         now = time(NULL);
         int elapsed_sec = (int)(now - start);
@@ -1249,27 +1469,107 @@ int main_runtime(
     for (int i = 0; i < nthreads; ++i) pthread_join(tids[i], NULL);
     if (mon_tid) pthread_join(mon_tid, NULL);
 
-    /* Final summary */
+    /* Final summary with statistics */
     if (total_curr && idle_curr) read_proc_stat(total_curr, idle_curr, g_available_cpus);
+    
+    /* Calculate final statistics */
+    uint64_t total_ops = 0;
+    for (int t = 0; t < nthreads; ++t) {
+        total_ops += __atomic_load_n(&wargs[t].ops_done, __ATOMIC_RELAXED);
+    }
+    long elapsed = (long)(time(NULL) - start);
+    double avg_temp = temp_count > 0 ? temp_sum / temp_count : 0.0;
+    long avg_freq = freq_count > 0 ? freq_sum / freq_count : 0;
+    double avg_ops_per_core = nthreads > 0 ? (double)total_ops / nthreads : 0.0;
+    double total_ops_millions = total_ops / 1000000.0;
+    
     printf("\n=== SUMMARY ===\n");
-    for (int c = 0; c < g_available_cpus; ++c) printf(" core %2d : last_total=%" PRIu64 " last_idle=%" PRIu64 "\n", c, total_curr ? total_curr[c] : 0, idle_curr ? idle_curr[c] : 0);
-    if (temp_path_ptr && *temp_path_ptr) { double t=read_temperature(*temp_path_ptr); if (!isnan(t)) printf(" Final CPU temp: %.2f C\n", t); }
-    printf(" Threads: %d  Duration requested: %ld s  Time elapsed: %lds\n", nthreads, duration, (long)(time(NULL) - start));
-    for (int t = 0; t < nthreads; ++t) { uint64_t ops = __atomic_load_n(&wargs[t].ops_done, __ATOMIC_RELAXED); printf(" thread %2d pinned->cpu%2d : total ops=%" PRIu64 "\n", t, wargs[t].cpu_id, ops); }
+    printf("\n--- Test Configuration ---\n");
+    printf(" Mode            : %s\n", mode);
+    printf(" Workload        : %s\n",
+           (type==W_INT)?"INT":
+           (type==W_FLOAT)?"FLOAT":
+           (type==W_SSE)?"SSE":
+           (type==W_AVX)?"AVX":
+           (type==W_AVX2)?"AVX2":
+           (type==W_AVX512)?"AVX512":
+           (type==W_AUTO)?"AUTO":"MIXED");
+    printf(" Threads         : %d\n", nthreads);
+    printf(" Target Util     : %.1f%%\n", util);
+    printf(" Duration        : %ld s (elapsed: %ld s)\n", duration, elapsed);
+    
+    printf("\n--- Aggregate Statistics ---\n");
+    if (temp_count > 0)
+        printf(" Avg Temperature : %.2f °C\n", avg_temp);
+    else
+        printf(" Avg Temperature : N/A\n");
+    
+    if (freq_count > 0)
+        printf(" Avg Frequency   : %.2f MHz (%.2f GHz)\n", 
+               avg_freq / 1000.0, avg_freq / 1000000.0);
+    else
+        printf(" Avg Frequency   : N/A\n");
+    
+    printf(" Total Operations: %.2f Million (%.2fM)\n", total_ops_millions, total_ops_millions);
+    printf(" Avg Ops/Core    : %.2f Million\n", avg_ops_per_core / 1000000.0);
+    printf(" Ops/Second      : %.2f Million/s\n", 
+           elapsed > 0 ? total_ops_millions / elapsed : 0.0);
+    
+    if (temp_path_ptr && *temp_path_ptr) { 
+        double t=read_temperature(*temp_path_ptr); 
+        if (!isnan(t)) 
+            printf(" Final Temperature: %.2f °C\n", t); 
+    }
+    
+    printf("\n--- Per-Thread Details ---\n");
+    for (int t = 0; t < nthreads; ++t) { 
+        uint64_t ops = __atomic_load_n(&wargs[t].ops_done, __ATOMIC_RELAXED); 
+        printf(" thread %2d -> cpu%2d : %" PRIu64 " ops (%.2fM)\n", 
+               t, wargs[t].cpu_id, ops, ops / 1000000.0); 
+    }
 
     /* Write summary file */
     if (summaryf) {
-        fprintf(summaryf, "coreburner summary\n");
+        fprintf(summaryf, "=== CoreBurner Test Summary ===\n\n");
+        fprintf(summaryf, "[Configuration]\n");
         fprintf(summaryf, "mode=%s\n", mode);
-        fprintf(summaryf, "workload=%s\n", (type==W_INT)?"INT":(type==W_FLOAT)?"FLOAT":(type==W_AVX)?"AVX":"MIXED");
-        fprintf(summaryf, "util=%.1f\n", util);
+        fprintf(summaryf, "workload=%s\n", 
+            (type==W_INT)?"INT":
+            (type==W_FLOAT)?"FLOAT":
+            (type==W_SSE)?"SSE":
+            (type==W_AVX)?"AVX":
+            (type==W_AVX2)?"AVX2":
+            (type==W_AVX512)?"AVX512":
+            (type==W_AUTO)?"AUTO":"MIXED");
+        fprintf(summaryf, "target_util=%.1f%%\n", util);
         fprintf(summaryf, "threads=%d\n", nthreads);
         fprintf(summaryf, "duration_requested=%ld\n", duration);
-        fprintf(summaryf, "time_elapsed=%ld\n", (long)(time(NULL)-start));
-        if (temp_path_ptr && *temp_path_ptr) { double t=read_temperature(*temp_path_ptr); if (!isnan(t)) fprintf(summaryf, "final_temp=%.2f\n", t); }
-        for (int t = 0; t < nthreads; ++t) { uint64_t ops = __atomic_load_n(&wargs[t].ops_done, __ATOMIC_RELAXED); fprintf(summaryf, "thread%02d_cpu%02d_ops=%" PRIu64 "\n", t, wargs[t].cpu_id, ops); }
+        fprintf(summaryf, "time_elapsed=%ld\n", elapsed);
+        
+        fprintf(summaryf, "\n[Aggregate Statistics]\n");
+        if (temp_count > 0)
+            fprintf(summaryf, "avg_temperature=%.2f\n", avg_temp);
+        if (freq_count > 0)
+            fprintf(summaryf, "avg_frequency_mhz=%.2f\n", avg_freq / 1000.0);
+        fprintf(summaryf, "total_operations=%.2f\n", total_ops_millions);
+        fprintf(summaryf, "avg_ops_per_core_millions=%.2f\n", avg_ops_per_core / 1000000.0);
+        fprintf(summaryf, "ops_per_second_millions=%.2f\n", 
+                elapsed > 0 ? total_ops_millions / elapsed : 0.0);
+        
+        if (temp_path_ptr && *temp_path_ptr) { 
+            double t=read_temperature(*temp_path_ptr); 
+            if (!isnan(t)) 
+                fprintf(summaryf, "final_temp=%.2f\n", t); 
+        }
+        
+        fprintf(summaryf, "\n[Per-Thread Results]\n");
+        for (int t = 0; t < nthreads; ++t) { 
+            uint64_t ops = __atomic_load_n(&wargs[t].ops_done, __ATOMIC_RELAXED); 
+            fprintf(summaryf, "thread%02d_cpu%02d_ops=%" PRIu64 "\n", t, wargs[t].cpu_id, ops); 
+            fprintf(summaryf, "thread%02d_cpu%02d_ops_millions=%.2f\n", t, wargs[t].cpu_id, ops / 1000000.0); 
+        }
         fclose(summaryf);
-        if (summary_path) printf("Summary written to %s\n", summary_path);
+        if (summary_path) printf("\nSummary written to %s\n", summary_path);
     }
 
     /* Cleanup */
@@ -1335,6 +1635,11 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    /* Auto-detect best SIMD level if AUTO was specified */
+    if (type == W_AUTO) {
+        type = auto_detect_best_simd();
+    }
+
     /* cpufreq/gov writes require root */
     int wants_cpufreq_write =
         (set_governor != NULL) ||
@@ -1374,7 +1679,11 @@ if (validate_environment(
         printf("  Workload        : %s\n",
                (type == W_INT) ? "INT" :
                (type == W_FLOAT) ? "FLOAT" :
-               (type == W_AVX) ? "AVX" : "MIXED");
+               (type == W_SSE) ? "SSE" :
+               (type == W_AVX) ? "AVX" :
+               (type == W_AVX2) ? "AVX2" :
+               (type == W_AVX512) ? "AVX512" :
+               (type == W_AUTO) ? "AUTO" : "MIXED");
         printf("  Utilization     : %.1f%%\n", util);
         printf("  Duration        : %ld s\n", duration);
 
@@ -1484,7 +1793,8 @@ if (validate_environment(
                 nthreads,
                 temp_threshold,
                 log_path,
-                log_interval,
+                log_interval,ls
+
                 log_append,
                 dynamic_freq,
                 current_max_freq,
