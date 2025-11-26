@@ -1689,6 +1689,118 @@ int main_runtime(
 }
 
 /*******************************************************
+ *     Parse CSV Log and Calculate True Averages
+ *******************************************************/
+typedef struct {
+    double avg_temp;
+    double avg_freq_mhz;
+    double avg_util_pct;
+    double avg_ops_per_core_millions;
+    double ops_per_sec_millions;
+    int sample_count;
+} csv_statistics_t;
+
+int parse_csv_log_for_stats(const char *csv_path, int nthreads, csv_statistics_t *stats) {
+    FILE *f = fopen(csv_path, "r");
+    if (!f) return -1;
+    
+    memset(stats, 0, sizeof(*stats));
+    
+    char line[65536];
+    int data_lines = 0;
+    
+    /* Skip comments and find header */
+    int found_header = 0;
+    while (fgets(line, sizeof(line), f)) {
+        if (line[0] == '#') continue;
+        if (strstr(line, "timestamp,elapsed_sec,cpu_temp")) {
+            found_header = 1;
+            break;
+        }
+    }
+    
+    if (!found_header) {
+        fclose(f);
+        return -1;
+    }
+    
+    /* Parse data lines */
+    while (fgets(line, sizeof(line), f)) {
+        /* Parse: timestamp,elapsed_sec,cpu_temp,cpu0_util,cpu0_freq,cpu1_util,cpu1_freq,... */
+        char *ptr = line;
+        char *endptr;
+        
+        /* Skip timestamp */
+        strtol(ptr, &endptr, 10);
+        if (*endptr != ',') continue;
+        ptr = endptr + 1;
+        
+        /* Skip elapsed_sec */
+        strtol(ptr, &endptr, 10);
+        if (*endptr != ',') continue;
+        ptr = endptr + 1;
+        
+        /* Read cpu_temp */
+        double temp = strtod(ptr, &endptr);
+        int temp_valid = (temp > 0 && endptr != ptr);
+        if (*endptr == ',') ptr = endptr + 1;
+        else continue;
+        
+        /* Read alternating util,freq pairs until we hit thread ops */
+        double total_util = 0.0;
+        double total_freq = 0.0;
+        int core_count = 0;
+        
+        /* We expect cores followed by thread ops (much larger numbers) */
+        while (*ptr && *ptr != '\n' && *ptr != '\r') {
+            /* Read util (should be 0-100) */
+            double util = strtod(ptr, &endptr);
+            if (endptr == ptr) break;
+            ptr = endptr;
+            if (*ptr == ',') ptr++;
+            
+            /* Read freq (should be in kHz, like 1800000-3500000) */
+            long freq = strtol(ptr, &endptr, 10);
+            if (endptr == ptr) break;
+            ptr = endptr;
+            if (*ptr == ',') ptr++;
+            
+            /* Check if this looks like core data (not thread ops) */
+            /* Thread ops are usually > 1M, freq is 1M-4M, util is 0-100 */
+            if (util >= 0 && util <= 100 && freq >= 100000 && freq <= 5000000) {
+                total_util += util;
+                total_freq += freq;
+                core_count++;
+            } else {
+                /* Likely hit thread operations data, stop parsing */
+                break;
+            }
+        }
+        
+        /* Accumulate statistics for this sample */
+        if (temp_valid) stats->avg_temp += temp;
+        if (core_count > 0) {
+            stats->avg_freq_mhz += (total_freq / core_count) / 1000.0;
+            stats->avg_util_pct += total_util / core_count;
+        }
+        
+        data_lines++;
+    }
+    
+    fclose(f);
+    
+    if (data_lines == 0) return -1;
+    
+    /* Calculate averages across all samples */
+    stats->avg_temp /= data_lines;
+    stats->avg_freq_mhz /= data_lines;
+    stats->avg_util_pct /= data_lines;
+    stats->sample_count = data_lines;
+    
+    return 0;
+}
+
+/*******************************************************
  *            Central Results CSV Logger
  *******************************************************/
 void write_results_csv(
@@ -1719,7 +1831,7 @@ void write_results_csv(
     if (!file_exists) {
         fprintf(results, "timestamp,date,time,mode,workload,threads,target_util,"
                         "duration_sec,elapsed_sec,avg_util_pct,avg_temp_c,avg_freq_mhz,"
-                        "total_ops_millions,ops_per_sec_millions,avg_ops_per_core_millions,"
+                        "total_ops_millions,ops_per_sec_millions,avg_ops_per_core_per_sec_millions,"
                         "command\n");
     }
     
@@ -1738,7 +1850,7 @@ void write_results_csv(
         (type==W_AVX512)?"AVX512":
         (type==W_AUTO)?"AUTO":"MIXED";
     
-    double avg_ops_per_core = nthreads > 0 ? total_ops_millions / nthreads : 0.0;
+    double avg_ops_per_core_per_sec = (nthreads > 0 && elapsed > 0) ? total_ops_millions / (elapsed * nthreads) : 0.0;
     
     /* Write data row */
     fprintf(results, "%ld,%s,%s,%s,%s,%d,%.1f,%ld,%ld,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,\"%s\"\n",
@@ -1756,7 +1868,7 @@ void write_results_csv(
             avg_freq / 1000.0,  /* Convert kHz to MHz */
             total_ops_millions,
             ops_per_second,
-            avg_ops_per_core,
+            avg_ops_per_core_per_sec,
             command_line ? command_line : "N/A");
     
     fclose(results);
@@ -1827,6 +1939,47 @@ int main(int argc, char **argv)
     /* Auto-detect best SIMD level if AUTO was specified */
     if (type == W_AUTO) {
         type = auto_detect_best_simd();
+    }
+
+    /* Auto-generate log path if not specified */
+    if (!log_path) {
+        /* Create log directory if it doesn't exist */
+        struct stat st = {0};
+        if (stat("log", &st) == -1) {
+            if (mkdir("log", 0755) != 0) {
+                fprintf(stderr, "Warning: Could not create log directory\n");
+            }
+        }
+        
+        const char *workload_short = 
+            (type == W_INT) ? "int" :
+            (type == W_FLOAT) ? "float" :
+            (type == W_SSE) ? "sse" :
+            (type == W_AVX) ? "avx" :
+            (type == W_AVX2) ? "avx2" :
+            (type == W_AVX512) ? "avx512" :
+            (type == W_AUTO) ? "auto" : "mixed";
+        
+        char auto_log_name[256];
+        time_t now = time(NULL);
+        struct tm *tm_info = localtime(&now);
+        
+        /* Format: log/mode_workload_util_duration_YYYYMMDD_HHMMSS.csv */
+        snprintf(auto_log_name, sizeof(auto_log_name),
+                 "log/%s_%s_util%.0f_dur%ld_%04d%02d%02d_%02d%02d%02d.csv",
+                 mode,
+                 workload_short,
+                 util,
+                 duration,
+                 tm_info->tm_year + 1900,
+                 tm_info->tm_mon + 1,
+                 tm_info->tm_mday,
+                 tm_info->tm_hour,
+                 tm_info->tm_min,
+                 tm_info->tm_sec);
+        
+        log_path = strdup(auto_log_name);
+        printf("Auto-generated log file: %s\n", log_path);
     }
 
     /* cpufreq/gov writes require root */
@@ -2007,25 +2160,41 @@ if (validate_environment(
         long elapsed = (long)(time(NULL) - start_timestamp);
         double total_ops_millions = total_ops / 1000000.0;
         double ops_per_second = elapsed > 0 ? total_ops_millions / elapsed : 0.0;
+        double avg_ops_per_core = nthreads > 0 ? total_ops_millions / nthreads : 0.0;
         
-        /* Read final temperature */
+        /* Try to get accurate statistics from CSV log file */
+        csv_statistics_t csv_stats = {0};
         double final_temp = 0.0;
-        if (temp_path) {
-            double t = read_temperature(temp_path);
-            if (!isnan(t)) final_temp = t;
-        }
+        double final_util = avg_util_actual;
+        double final_freq_mhz = 0.0;
         
-        /* Get average frequency (approximate from last known values) */
-        long avg_freq_approx = 0;
-        int freq_samples = 0;
-        for (int c = 0; c < g_available_cpus && c < 64; ++c) {
-            long hz = 0;
-            if (read_scaling_cur_freq(c, &hz) == 0 && hz > 0) {
-                avg_freq_approx += hz;
-                freq_samples++;
+        if (log_path && parse_csv_log_for_stats(log_path, nthreads, &csv_stats) == 0) {
+            /* Successfully parsed CSV - use those statistics */
+            final_temp = csv_stats.avg_temp;
+            final_freq_mhz = csv_stats.avg_freq_mhz;
+            final_util = csv_stats.avg_util_pct;
+            printf("\n✓ Calculated statistics from %d CSV samples in %s\n", 
+                   csv_stats.sample_count, log_path);
+        } else {
+            /* Fallback: use final readings */
+            if (temp_path) {
+                double t = read_temperature(temp_path);
+                if (!isnan(t)) final_temp = t;
             }
+            
+            long avg_freq_hz = 0;
+            int freq_samples = 0;
+            for (int c = 0; c < g_available_cpus && c < 64; ++c) {
+                long hz = 0;
+                if (read_scaling_cur_freq(c, &hz) == 0 && hz > 0) {
+                    avg_freq_hz += hz;
+                    freq_samples++;
+                }
+            }
+            if (freq_samples > 0) final_freq_mhz = (avg_freq_hz / freq_samples) / 1000.0;
+            
+            printf("\n⚠ Using final snapshot (CSV log not available or invalid)\n");
         }
-        if (freq_samples > 0) avg_freq_approx /= freq_samples;
         
         write_results_csv(
             mode,
@@ -2034,9 +2203,9 @@ if (validate_environment(
             util,
             duration,
             elapsed,
-            avg_util_actual,
+            final_util,
             final_temp,
-            avg_freq_approx,
+            (long)(final_freq_mhz * 1000),  /* Convert MHz back to kHz for function signature */
             total_ops_millions,
             ops_per_second,
             command_line,
