@@ -333,13 +333,13 @@ void sse_work_unit(float *buf) {
     for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 4) {
         __m128 a = _mm_loadu_ps(buf + i);
         
-        /* Compute-intensive operations on this chunk */
+        /* Standard operations for ISA comparison (5 ops per iteration) */
         for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
-            a = _mm_add_ps(a, b);
-            a = _mm_mul_ps(a, c);
-            a = _mm_div_ps(a, _mm_add_ps(d, _mm_set1_ps(0.5f)));
-            a = _mm_sqrt_ps(_mm_mul_ps(a, a));
-            a = _mm_sub_ps(a, _mm_mul_ps(b, c));
+            a = _mm_add_ps(a, b);                           /* 1. add */
+            a = _mm_mul_ps(a, c);                           /* 2. mul */
+            a = _mm_div_ps(a, _mm_add_ps(d, b));           /* 3. div */
+            a = _mm_sqrt_ps(_mm_mul_ps(a, a));             /* 4. sqrt */
+            a = _mm_sub_ps(a, _mm_mul_ps(b, c));           /* 5. sub */
         }
         
         _mm_storeu_ps(buf + i, a);
@@ -356,14 +356,13 @@ void avx_work_unit(float *buf) {
     for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 8) {
         __m256 a = _mm256_loadu_ps(buf + i);
         
-        /* Same operations as SSE but on 2x wider vectors */
+        /* IDENTICAL operations as SSE but on 2x wider vectors */
         for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
-            a = _mm256_add_ps(a, b);
-            a = _mm256_mul_ps(a, c);
-            a = _mm256_div_ps(a, _mm256_add_ps(d, _mm256_set1_ps(0.5f)));
-            a = _mm256_sqrt_ps(_mm256_mul_ps(a, a));
-            a = _mm256_sub_ps(a, _mm256_mul_ps(b, c));
-            a = _mm256_mul_ps(a, _mm256_add_ps(c, d));
+            a = _mm256_add_ps(a, b);                           /* 1. add */
+            a = _mm256_mul_ps(a, c);                           /* 2. mul */
+            a = _mm256_div_ps(a, _mm256_add_ps(d, b));        /* 3. div */
+            a = _mm256_sqrt_ps(_mm256_mul_ps(a, a));          /* 4. sqrt */
+            a = _mm256_sub_ps(a, _mm256_mul_ps(b, c));        /* 5. sub */
         }
         
         _mm256_storeu_ps(buf + i, a);
@@ -380,13 +379,13 @@ void avx2_work_unit(float *buf) {
     for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 8) {
         __m256 a = _mm256_loadu_ps(buf + i);
         
-        /* FMA-intensive operations (AVX2 advantage over AVX) */
+        /* IDENTICAL operations as SSE/AVX but using FMA where applicable */
         for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
-            a = _mm256_fmadd_ps(a, c, b);           /* a = a * c + b */
-            a = _mm256_fmsub_ps(a, d, c);           /* a = a * d - c */
-            a = _mm256_fnmadd_ps(b, c, a);          /* a = -(b * c) + a */
-            a = _mm256_div_ps(a, _mm256_add_ps(d, b));
-            a = _mm256_fmadd_ps(a, a, _mm256_mul_ps(b, c));
+            a = _mm256_add_ps(a, b);                           /* 1. add */
+            a = _mm256_mul_ps(a, c);                           /* 2. mul */
+            a = _mm256_div_ps(a, _mm256_add_ps(d, b));        /* 3. div */
+            a = _mm256_sqrt_ps(_mm256_mul_ps(a, a));          /* 4. sqrt */
+            a = _mm256_sub_ps(a, _mm256_mul_ps(b, c));        /* 5. sub */
         }
         
         _mm256_storeu_ps(buf + i, a);
@@ -404,14 +403,13 @@ void avx512_work_unit(float *buf) {
     for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 16) {
         __m512 a = _mm512_loadu_ps(buf + i);
         
-        /* FMA operations on widest vectors */
+        /* IDENTICAL operations as SSE/AVX/AVX2 but on 4x wider vectors */
         for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
-            a = _mm512_fmadd_ps(a, c, b);           /* a = a * c + b */
-            a = _mm512_fmsub_ps(a, d, c);           /* a = a * d - c */
-            a = _mm512_fnmadd_ps(b, c, a);          /* a = -(b * c) + a */
-            a = _mm512_div_ps(a, _mm512_add_ps(d, b));
-            a = _mm512_fmadd_ps(a, a, _mm512_mul_ps(b, c));
-            a = _mm512_sqrt_ps(_mm512_mul_ps(a, a));
+            a = _mm512_add_ps(a, b);                           /* 1. add */
+            a = _mm512_mul_ps(a, c);                           /* 2. mul */
+            a = _mm512_div_ps(a, _mm512_add_ps(d, b));        /* 3. div */
+            a = _mm512_sqrt_ps(_mm512_mul_ps(a, a));          /* 4. sqrt */
+            a = _mm512_sub_ps(a, _mm512_mul_ps(b, c));        /* 5. sub */
         }
         
         _mm512_storeu_ps(buf + i, a);
