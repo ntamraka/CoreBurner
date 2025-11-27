@@ -1341,7 +1341,14 @@ void *worker_thread(void *arg) {
                     }
                 }
 
-                __atomic_fetch_add(&w->ops_done, 1, __ATOMIC_RELAXED);
+                /* Scale operations counter to reflect actual work done
+                 * Array-based SIMD: 1 work_unit = SIMD_ARRAY_SIZE * SIMD_INNER_ITERATIONS float ops
+                 * Report in thousands to keep numbers manageable (1M * 100 / 1000 = 100K per work unit) */
+                uint64_t ops_scale = (w->type >= W_SSE && w->type <= W_AVX512) 
+                    ? (SIMD_ARRAY_SIZE * SIMD_INNER_ITERATIONS / 1000)  /* ~100K for SIMD workloads */
+                    : 1;  /* Keep old scale for INT/FLOAT */
+                
+                __atomic_fetch_add(&w->ops_done, ops_scale, __ATOMIC_RELAXED);
 
                 clock_gettime(CLOCK_MONOTONIC, &t1);
                 long elapsed = (t1.tv_sec - t0.tv_sec) * 1000000000L + (t1.tv_nsec - t0.tv_nsec);
