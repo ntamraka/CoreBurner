@@ -64,6 +64,10 @@
 #define TEMP_SANITY_MIN -20.0
 #define TEMP_SANITY_MAX 150.0
 
+/* Array-based SIMD workload configuration */
+#define SIMD_ARRAY_SIZE (1024 * 1024)  /* 1M floats = 4MB per buffer */
+#define SIMD_INNER_ITERATIONS 100       /* Operations per array chunk */
+
 static volatile sig_atomic_t stop_flag = 0;
 static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
 
@@ -295,9 +299,11 @@ void print_cpu_simd_capabilities();
 void int_work_unit(volatile uint64_t *state) {
     uint64_t x = *state;
 
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < 10000000; ++i) {
         x += (x << 1) ^ 0x9e3779b97f4a7c15ULL;
         x ^= (x >> 7);
+        x = x * 6364136223846793005ULL + 1442695040888963407ULL;
+        x ^= (x >> 13);
     }
 
     *state = x;
@@ -307,67 +313,109 @@ void int_work_unit(volatile uint64_t *state) {
 void float_work_unit(volatile double *state) {
     double x = *state;
 
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < 10000000; ++i) {
         x = x * 1.0000001 + 0.10000001;
         x = fmod(x, 100000.0);
+        x = sqrt(x * x + 1.0);
+        x = x / 1.0000001;
     }
 
     *state = x;
 }
 
-/* SSE workload - 128-bit SIMD */
+/* SSE workload - 128-bit SIMD (array-based for true vectorization) */
 void sse_work_unit(float *buf) {
-    __m128 a = _mm_loadu_ps(buf);
     __m128 b = _mm_set1_ps(1.000001f);
+    __m128 c = _mm_set1_ps(0.999999f);
+    __m128 d = _mm_set1_ps(0.5f);
 
-    for (int i = 0; i < 256; ++i) {
-        a = _mm_add_ps(a, b);
-        a = _mm_mul_ps(a, _mm_set1_ps(0.999999f));
+    /* Process array in 4-float chunks (SSE processes 4 floats/iteration) */
+    for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 4) {
+        __m128 a = _mm_loadu_ps(buf + i);
+        
+        /* Compute-intensive operations on this chunk */
+        for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
+            a = _mm_add_ps(a, b);
+            a = _mm_mul_ps(a, c);
+            a = _mm_div_ps(a, _mm_add_ps(d, _mm_set1_ps(0.5f)));
+            a = _mm_sqrt_ps(_mm_mul_ps(a, a));
+            a = _mm_sub_ps(a, _mm_mul_ps(b, c));
+        }
+        
+        _mm_storeu_ps(buf + i, a);
     }
-
-    _mm_storeu_ps(buf, a);
 }
 
-/* AVX workload - 256-bit FP only */
+/* AVX workload - 256-bit FP only (array-based for true vectorization) */
 void avx_work_unit(float *buf) {
-    __m256 a = _mm256_loadu_ps(buf);
-    __m256 b = _mm256_set1_ps(1.000001f);
-
-    for (int i = 0; i < 256; ++i) {
-        a = _mm256_add_ps(a, b);
-        a = _mm256_mul_ps(a, _mm256_set1_ps(0.999999f));
-    }
-
-    _mm256_storeu_ps(buf, a);
-}
-
-/* AVX2 workload - 256-bit with FMA */
-void avx2_work_unit(float *buf) {
-    __m256 a = _mm256_loadu_ps(buf);
     __m256 b = _mm256_set1_ps(1.000001f);
     __m256 c = _mm256_set1_ps(0.999999f);
+    __m256 d = _mm256_set1_ps(0.5f);
 
-    for (int i = 0; i < 256; ++i) {
-        /* FMA: a = a * c + b */
-        a = _mm256_fmadd_ps(a, c, b);
+    /* Process array in 8-float chunks (AVX processes 8 floats/iteration = 2x SSE) */
+    for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 8) {
+        __m256 a = _mm256_loadu_ps(buf + i);
+        
+        /* Same operations as SSE but on 2x wider vectors */
+        for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
+            a = _mm256_add_ps(a, b);
+            a = _mm256_mul_ps(a, c);
+            a = _mm256_div_ps(a, _mm256_add_ps(d, _mm256_set1_ps(0.5f)));
+            a = _mm256_sqrt_ps(_mm256_mul_ps(a, a));
+            a = _mm256_sub_ps(a, _mm256_mul_ps(b, c));
+            a = _mm256_mul_ps(a, _mm256_add_ps(c, d));
+        }
+        
+        _mm256_storeu_ps(buf + i, a);
     }
+}
 
-    _mm256_storeu_ps(buf, a);
+/* AVX2 workload - 256-bit with FMA (array-based for true vectorization) */
+void avx2_work_unit(float *buf) {
+    __m256 b = _mm256_set1_ps(1.000001f);
+    __m256 c = _mm256_set1_ps(0.999999f);
+    __m256 d = _mm256_set1_ps(0.5f);
+
+    /* Process array in 8-float chunks with FMA operations */
+    for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 8) {
+        __m256 a = _mm256_loadu_ps(buf + i);
+        
+        /* FMA-intensive operations (AVX2 advantage over AVX) */
+        for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
+            a = _mm256_fmadd_ps(a, c, b);           /* a = a * c + b */
+            a = _mm256_fmsub_ps(a, d, c);           /* a = a * d - c */
+            a = _mm256_fnmadd_ps(b, c, a);          /* a = -(b * c) + a */
+            a = _mm256_div_ps(a, _mm256_add_ps(d, b));
+            a = _mm256_fmadd_ps(a, a, _mm256_mul_ps(b, c));
+        }
+        
+        _mm256_storeu_ps(buf + i, a);
+    }
 }
 
 /* AVX-512 workload - 512-bit vectors */
 void avx512_work_unit(float *buf) {
 #ifdef __AVX512F__
-    __m512 a = _mm512_loadu_ps(buf);
     __m512 b = _mm512_set1_ps(1.000001f);
     __m512 c = _mm512_set1_ps(0.999999f);
+    __m512 d = _mm512_set1_ps(0.5f);
 
-    for (int i = 0; i < 256; ++i) {
-        /* FMA: a = a * c + b */
-        a = _mm512_fmadd_ps(a, c, b);
+    /* Process array in 16-float chunks (AVX-512 processes 16 floats/iteration = 4x SSE) */
+    for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 16) {
+        __m512 a = _mm512_loadu_ps(buf + i);
+        
+        /* FMA operations on widest vectors */
+        for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
+            a = _mm512_fmadd_ps(a, c, b);           /* a = a * c + b */
+            a = _mm512_fmsub_ps(a, d, c);           /* a = a * d - c */
+            a = _mm512_fnmadd_ps(b, c, a);          /* a = -(b * c) + a */
+            a = _mm512_div_ps(a, _mm512_add_ps(d, b));
+            a = _mm512_fmadd_ps(a, a, _mm512_mul_ps(b, c));
+            a = _mm512_sqrt_ps(_mm512_mul_ps(a, a));
+        }
+        
+        _mm512_storeu_ps(buf + i, a);
     }
-
-    _mm512_storeu_ps(buf, a);
 #else
     /* Fallback to AVX2 if AVX-512 not available at compile time */
     avx2_work_unit(buf);
@@ -1224,14 +1272,22 @@ void *worker_thread(void *arg) {
     volatile uint64_t int_state = (uint64_t)(uintptr_t)w ^ 0xabcdef;
     volatile double float_state = (double)(w->cpu_id + 1) * 1.234567;
     
-    /* Aligned buffers for SIMD operations */
-    float sse_buf[4] __attribute__((aligned(16)));
-    float avx_buf[8] __attribute__((aligned(32)));
-    float avx512_buf[16] __attribute__((aligned(64)));
+    /* Aligned buffers for array-based SIMD operations (1M floats = 4MB) */
+    float *sse_buf = (float*)aligned_alloc(16, SIMD_ARRAY_SIZE * sizeof(float));
+    float *avx_buf = (float*)aligned_alloc(32, SIMD_ARRAY_SIZE * sizeof(float));
+    float *avx512_buf = (float*)aligned_alloc(64, SIMD_ARRAY_SIZE * sizeof(float));
     
-    for (int i = 0; i < 4; ++i) sse_buf[i] = (float)(i + w->cpu_id);
-    for (int i = 0; i < 8; ++i) avx_buf[i] = (float)(i + w->cpu_id);
-    for (int i = 0; i < 16; ++i) avx512_buf[i] = (float)(i + w->cpu_id);
+    if (!sse_buf || !avx_buf || !avx512_buf) {
+        fprintf(stderr, "Failed to allocate SIMD buffers\n");
+        return NULL;
+    }
+    
+    /* Initialize arrays with unique values */
+    for (size_t i = 0; i < SIMD_ARRAY_SIZE; ++i) {
+        sse_buf[i] = (float)(i + w->cpu_id);
+        avx_buf[i] = (float)(i + w->cpu_id);
+        avx512_buf[i] = (float)(i + w->cpu_id);
+    }
 
     /* RNG seed per-thread */
     unsigned int rnd_seed = (unsigned int)(time(NULL) ^ (uintptr_t)w ^ (w->cpu_id * 7919));
@@ -1298,6 +1354,11 @@ void *worker_thread(void *arg) {
         if (sleep_ns > 0 && !stop_flag)
             safe_nanosleep(0, sleep_ns);
     }
+
+    /* Cleanup allocated SIMD buffers */
+    free(sse_buf);
+    free(avx_buf);
+    free(avx512_buf);
 
     return NULL;
 }
