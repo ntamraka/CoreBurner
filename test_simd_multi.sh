@@ -1,6 +1,14 @@
 #!/bin/bash
 # Test script for multi-core SIMD workload comparison
 # Tests SSE, AVX, AVX2, and AVX-512 at 100% utilization with enhanced compute-heavy workloads
+# Usage: ./test_simd_multi.sh [emon]
+
+# Parse arguments
+USE_TMC=""
+if [ "$1" == "emon" ]; then
+    USE_TMC="yes"
+    echo "TMC profiling enabled"
+fi
 
 echo "═══════════════════════════════════════════════════════════════"
 echo "  MULTI-CORE SIMD WORKLOAD TEST (Enhanced Compute)"
@@ -12,6 +20,9 @@ echo "Duration: 2 minutes each"
 echo "Utilization: 100%"
 echo "Array size: 1M floats per thread"
 echo "Loop iterations: 100 per array chunk"
+if [ "$USE_TMC" == "yes" ]; then
+    echo "TMC: Enabled with dynamic -a (workload) and -i (Run1) arguments"
+fi
 echo ""
 
 # Rebuild with new workloads
@@ -32,30 +43,46 @@ echo ""
 
 # Test 1: SSE (128-bit SIMD)
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Test 1/4: SSE (128-bit) workload on all cores"
+echo "Test 1/4: SSE (128-bit) workload - Multi-core"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-./coreburner --mode multi --util 100 --duration 2m --type SSE
+if [ "$USE_TMC" == "yes" ]; then
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a SSE -i Run1 -c "./coreburner --mode multi --util 100 --duration 2m --type SSE"
+else
+    ./coreburner --mode multi --util 100 --duration 2m --type SSE
+fi
 echo ""
 
 # Test 2: AVX (256-bit SIMD)
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Test 2/4: AVX (256-bit) workload on all cores"
+echo "Test 2/4: AVX (256-bit) workload - Multi-core"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-./coreburner --mode multi --util 100 --duration 2m --type AVX
+if [ "$USE_TMC" == "yes" ]; then
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX -i Run1 -c "./coreburner --mode multi --util 100 --duration 2m --type AVX"
+else
+    ./coreburner --mode multi --util 100 --duration 2m --type AVX
+fi
 echo ""
 
 # Test 3: AVX2 (256-bit with FMA)
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Test 3/4: AVX2 (256-bit + FMA) workload on all cores"
+echo "Test 3/4: AVX2 (256-bit + FMA) workload - Multi-core"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-./coreburner --mode multi --util 100 --duration 2m --type AVX2
+if [ "$USE_TMC" == "yes" ]; then
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX2 -i Run1 -c "./coreburner --mode multi --util 100 --duration 2m --type AVX2"
+else
+    ./coreburner --mode multi --util 100 --duration 2m --type AVX2
+fi
 echo ""
 
 # Test 4: AVX-512 (512-bit SIMD)
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Test 4/4: AVX-512 (512-bit) workload on all cores"
+echo "Test 4/4: AVX-512 (512-bit) workload - Multi-core"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-./coreburner --mode multi --util 100 --duration 2m --type AVX512
+if [ "$USE_TMC" == "yes" ]; then
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX512 -i Run1 -c "./coreburner --mode multi --util 100 --duration 2m --type AVX512"
+else
+    ./coreburner --mode multi --util 100 --duration 2m --type AVX512
+fi
 echo ""
 
 # Display results
