@@ -13,6 +13,11 @@
  *  - Dynamic frequency tuner (auto step-down)
  *  - CSV logging + human-readable summary
  *  - Safe logging fallback, ops counter wraparound handling
+ *  - MSR-based frequency measurement (APERF/MPERF)
+ *  - RAPL power monitoring
+ *  - DCL frequency validation
+ *  - Cdyn class detection and mapping
+ *  - Frequency residency tracking
  *
  * Build:
  *   gcc -O2 -march=native -pthread -std=c11 -Wall -Wextra -o coreburner coreburner.c -lm
@@ -67,6 +72,47 @@
 /* Array-based SIMD workload configuration */
 #define SIMD_ARRAY_SIZE (1024 * 1024)  /* 1M floats = 4MB per buffer */
 #define SIMD_INNER_ITERATIONS 100       /* Operations per array chunk */
+
+/* MSR Registers for frequency and power */
+#define MSR_IA32_APERF 0x000000E8
+#define MSR_IA32_MPERF 0x000000E7
+#define MSR_RAPL_POWER_UNIT 0x606
+#define MSR_PKG_ENERGY_STATUS 0x611
+#define MSR_PP0_ENERGY_STATUS 0x639
+#define MSR_DRAM_ENERGY_STATUS 0x619
+
+/* Frequency residency buckets (in MHz) */
+#define FREQ_BUCKETS 20
+#define FREQ_BUCKET_SIZE 200  /* 200 MHz per bucket */
+
+/* Cdyn class definitions */
+typedef enum {
+    CDYN_CLASS_0 = 0,  /* Low dynamic capacitance (INT, SSE) */
+    CDYN_CLASS_1 = 1,  /* Medium dynamic capacitance (AVX) */
+    CDYN_CLASS_2 = 2,  /* High dynamic capacitance (AVX2, AVX512) */
+    CDYN_CLASS_UNKNOWN = -1
+} cdyn_class_t;
+
+/* DCL Validation structure */
+typedef struct {
+    int enabled;
+    double sse_p0n_mhz;
+    double avx_p0n_mhz;
+    double avx2_p0n_mhz;
+    double avx512_p0n_mhz;
+    double p1_mhz;
+    double all_core_turbo_mhz;
+    double tolerance_pct;  /* Acceptable deviation percentage */
+} dcl_spec_t;
+
+/* Frequency residency tracker */
+typedef struct {
+    uint64_t buckets[FREQ_BUCKETS];
+    uint64_t total_samples;
+    double min_freq_mhz;
+    double max_freq_mhz;
+    double avg_freq_mhz;
+} freq_residency_t;
 
 static volatile sig_atomic_t stop_flag = 0;
 static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -279,6 +325,154 @@ int write_scaling_min_max(int cpu, long min_hz, long max_hz) {
 }
 
 /***********************************************************
+ *                  MSR Reading Functions
+ ***********************************************************/
+int open_msr(int cpu) {
+    char path[64];
+    snprintf(path, sizeof(path), "/dev/cpu/%d/msr", cpu);
+    int fd = open(path, O_RDONLY);
+    return fd;
+}
+
+int read_msr(int fd, uint32_t reg, uint64_t *val) {
+    if (fd < 0) return -1;
+    if (pread(fd, val, sizeof(*val), reg) != sizeof(*val))
+        return -1;
+    return 0;
+}
+
+void close_msr(int fd) {
+    if (fd >= 0) close(fd);
+}
+
+/* Calculate actual frequency from APERF/MPERF ratio 
+ * Returns frequency in MHz, or -1 on error */
+double calculate_frequency_mhz(int cpu, double base_freq_mhz) {
+    static uint64_t prev_aperf[256] = {0};
+    static uint64_t prev_mperf[256] = {0};
+    static int initialized = 0;
+    
+    if (cpu < 0 || cpu >= 256) return -1.0;
+    
+    int msr_fd = open_msr(cpu);
+    if (msr_fd < 0) return -1.0;
+    
+    uint64_t aperf = 0, mperf = 0;
+    if (read_msr(msr_fd, MSR_IA32_APERF, &aperf) != 0 ||
+        read_msr(msr_fd, MSR_IA32_MPERF, &mperf) != 0) {
+        close_msr(msr_fd);
+        return -1.0;
+    }
+    close_msr(msr_fd);
+    
+    if (!initialized || prev_mperf[cpu] == 0) {
+        prev_aperf[cpu] = aperf;
+        prev_mperf[cpu] = mperf;
+        initialized = 1;
+        return base_freq_mhz;  /* Return base freq on first call */
+    }
+    
+    uint64_t aperf_delta = aperf - prev_aperf[cpu];
+    uint64_t mperf_delta = mperf - prev_mperf[cpu];
+    
+    prev_aperf[cpu] = aperf;
+    prev_mperf[cpu] = mperf;
+    
+    if (mperf_delta == 0) return base_freq_mhz;
+    
+    double freq_ratio = (double)aperf_delta / (double)mperf_delta;
+    return base_freq_mhz * freq_ratio;
+}
+
+/***********************************************************
+ *                  RAPL Power Reading
+ ***********************************************************/
+typedef struct {
+    int fd;
+    double energy_unit;
+    uint64_t prev_pkg_energy;
+    uint64_t prev_pp0_energy;
+    uint64_t prev_dram_energy;
+    struct timespec prev_time;
+} rapl_state_t;
+
+int rapl_init(rapl_state_t *state, int cpu) {
+    if (!state) return -1;
+    
+    memset(state, 0, sizeof(*state));
+    state->fd = open_msr(cpu);
+    if (state->fd < 0) return -1;
+    
+    /* Read energy unit */
+    uint64_t unit_reg = 0;
+    if (read_msr(state->fd, MSR_RAPL_POWER_UNIT, &unit_reg) != 0) {
+        close_msr(state->fd);
+        state->fd = -1;
+        return -1;
+    }
+    
+    /* Energy unit is in bits 12:8 */
+    state->energy_unit = 1.0 / (1 << ((unit_reg >> 8) & 0x1F));
+    
+    /* Initialize counters */
+    read_msr(state->fd, MSR_PKG_ENERGY_STATUS, &state->prev_pkg_energy);
+    read_msr(state->fd, MSR_PP0_ENERGY_STATUS, &state->prev_pp0_energy);
+    read_msr(state->fd, MSR_DRAM_ENERGY_STATUS, &state->prev_dram_energy);
+    clock_gettime(CLOCK_MONOTONIC, &state->prev_time);
+    
+    return 0;
+}
+
+/* Returns average power in watts since last call */
+int rapl_read_power(rapl_state_t *state, double *pkg_watts, double *pp0_watts, double *dram_watts) {
+    if (!state || state->fd < 0) return -1;
+    
+    uint64_t pkg_energy = 0, pp0_energy = 0, dram_energy = 0;
+    struct timespec now;
+    
+    read_msr(state->fd, MSR_PKG_ENERGY_STATUS, &pkg_energy);
+    read_msr(state->fd, MSR_PP0_ENERGY_STATUS, &pp0_energy);
+    read_msr(state->fd, MSR_DRAM_ENERGY_STATUS, &dram_energy);
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    
+    double time_delta = (now.tv_sec - state->prev_time.tv_sec) +
+                       (now.tv_nsec - state->prev_time.tv_nsec) / 1e9;
+    
+    if (time_delta < 0.001) return -1;  /* Too short interval */
+    
+    /* Handle counter wraparound (32-bit counters) */
+    uint64_t pkg_delta = (pkg_energy >= state->prev_pkg_energy) ? 
+        (pkg_energy - state->prev_pkg_energy) : 
+        ((1ULL << 32) - state->prev_pkg_energy + pkg_energy);
+    
+    uint64_t pp0_delta = (pp0_energy >= state->prev_pp0_energy) ?
+        (pp0_energy - state->prev_pp0_energy) :
+        ((1ULL << 32) - state->prev_pp0_energy + pp0_energy);
+    
+    uint64_t dram_delta = (dram_energy >= state->prev_dram_energy) ?
+        (dram_energy - state->prev_dram_energy) :
+        ((1ULL << 32) - state->prev_dram_energy + dram_energy);
+    
+    if (pkg_watts) *pkg_watts = (pkg_delta * state->energy_unit) / time_delta;
+    if (pp0_watts) *pp0_watts = (pp0_delta * state->energy_unit) / time_delta;
+    if (dram_watts) *dram_watts = (dram_delta * state->energy_unit) / time_delta;
+    
+    state->prev_pkg_energy = pkg_energy;
+    state->prev_pp0_energy = pp0_energy;
+    state->prev_dram_energy = dram_energy;
+    state->prev_time = now;
+    
+    return 0;
+}
+
+void rapl_close(rapl_state_t *state) {
+    if (state && state->fd >= 0) {
+        close_msr(state->fd);
+        state->fd = -1;
+    }
+}
+
+/***********************************************************
  *                      Work Units
  ***********************************************************/
 typedef enum { 
@@ -294,6 +488,133 @@ typedef enum {
 
 /* Forward declarations */
 void print_cpu_simd_capabilities();
+
+/***********************************************************
+ *          Cdyn Class Detection and Mapping
+ ***********************************************************/
+cdyn_class_t get_cdyn_class(workload_t type) {
+    switch (type) {
+        case W_INT:
+        case W_FLOAT:
+        case W_SSE:
+            return CDYN_CLASS_0;  /* Low Cdyn */
+        case W_AVX:
+            return CDYN_CLASS_1;  /* Medium Cdyn */
+        case W_AVX2:
+        case W_AVX512:
+            return CDYN_CLASS_2;  /* High Cdyn */
+        case W_MIXED:
+        case W_AUTO:
+        default:
+            return CDYN_CLASS_UNKNOWN;
+    }
+}
+
+const char* cdyn_class_name(cdyn_class_t cdyn) {
+    switch (cdyn) {
+        case CDYN_CLASS_0: return "Cdyn0 (Low)";
+        case CDYN_CLASS_1: return "Cdyn1 (Medium)";
+        case CDYN_CLASS_2: return "Cdyn2 (High)";
+        default: return "Unknown";
+    }
+}
+
+/***********************************************************
+ *          Frequency Residency Tracking
+ ***********************************************************/
+void freq_residency_init(freq_residency_t *res) {
+    memset(res, 0, sizeof(*res));
+    res->min_freq_mhz = 1e9;
+    res->max_freq_mhz = 0;
+}
+
+void freq_residency_add_sample(freq_residency_t *res, double freq_mhz) {
+    if (freq_mhz <= 0) return;
+    
+    res->total_samples++;
+    
+    /* Update min/max */
+    if (freq_mhz < res->min_freq_mhz) res->min_freq_mhz = freq_mhz;
+    if (freq_mhz > res->max_freq_mhz) res->max_freq_mhz = freq_mhz;
+    
+    /* Update running average */
+    res->avg_freq_mhz = ((res->avg_freq_mhz * (res->total_samples - 1)) + freq_mhz) / 
+                        res->total_samples;
+    
+    /* Add to bucket */
+    int bucket = (int)(freq_mhz / FREQ_BUCKET_SIZE);
+    if (bucket >= 0 && bucket < FREQ_BUCKETS) {
+        res->buckets[bucket]++;
+    }
+}
+
+void freq_residency_print(const freq_residency_t *res, FILE *f) {
+    if (!res || res->total_samples == 0) return;
+    
+    fprintf(f, "\nFrequency Residency Distribution:\n");
+    fprintf(f, "  Min: %.0f MHz, Max: %.0f MHz, Avg: %.0f MHz\n",
+            res->min_freq_mhz, res->max_freq_mhz, res->avg_freq_mhz);
+    fprintf(f, "  Total samples: %lu\n", res->total_samples);
+    fprintf(f, "\n  Frequency Range    Samples    Percentage\n");
+    fprintf(f, "  ----------------------------------------------\n");
+    
+    for (int i = 0; i < FREQ_BUCKETS; i++) {
+        if (res->buckets[i] > 0) {
+            double pct = (100.0 * res->buckets[i]) / res->total_samples;
+            fprintf(f, "  %4d - %4d MHz  %8lu    %6.2f%%\n",
+                    i * FREQ_BUCKET_SIZE, 
+                    (i + 1) * FREQ_BUCKET_SIZE,
+                    res->buckets[i], pct);
+        }
+    }
+}
+
+/***********************************************************
+ *          DCL Frequency Validation
+ ***********************************************************/
+int validate_frequency(const dcl_spec_t *dcl, workload_t type, double measured_mhz) {
+    if (!dcl || !dcl->enabled) return 1;  /* No validation, pass by default */
+    
+    double expected_mhz = 0;
+    const char *type_name = "UNKNOWN";
+    
+    switch (type) {
+        case W_SSE:
+            expected_mhz = dcl->sse_p0n_mhz;
+            type_name = "SSE P0n";
+            break;
+        case W_AVX:
+            expected_mhz = dcl->avx_p0n_mhz;
+            type_name = "AVX P0n";
+            break;
+        case W_AVX2:
+            expected_mhz = dcl->avx2_p0n_mhz;
+            type_name = "AVX2 P0n";
+            break;
+        case W_AVX512:
+            expected_mhz = dcl->avx512_p0n_mhz;
+            type_name = "AVX512 P0n";
+            break;
+        default:
+            return 1;  /* No spec for this workload type */
+    }
+    
+    if (expected_mhz <= 0) return 1;  /* No spec defined */
+    
+    double deviation_pct = fabs((measured_mhz - expected_mhz) / expected_mhz * 100.0);
+    int passed = (deviation_pct <= dcl->tolerance_pct);
+    
+    printf("\n=== DCL Frequency Validation ===\n");
+    printf("  Workload Type     : %s\n", type_name);
+    printf("  Expected Frequency: %.0f MHz\n", expected_mhz);
+    printf("  Measured Frequency: %.0f MHz\n", measured_mhz);
+    printf("  Deviation         : %.2f%%\n", deviation_pct);
+    printf("  Tolerance         : %.2f%%\n", dcl->tolerance_pct);
+    printf("  Result            : %s\n", passed ? "PASS" : "FAIL");
+    printf("================================\n\n");
+    
+    return passed;
+}
 
 /* INT workload */
 void int_work_unit(volatile uint64_t *state) {
@@ -685,6 +1006,17 @@ void print_usage(const char *prog) {
         "  --mixed-ratio A:B:C      INT:FLOAT:AVX ratios\n"
         "                           Example: --mixed-ratio 5:2:3\n"
         "\n"
+        "DCL Frequency Validation (requires MSR access):\n"
+        "  --validate-dcl           Enable DCL frequency validation\n"
+        "  --dcl-sse-freq MHZ       Expected SSE P0n frequency\n"
+        "  --dcl-avx-freq MHZ       Expected AVX P0n frequency\n"
+        "  --dcl-avx2-freq MHZ      Expected AVX2 P0n frequency\n"
+        "  --dcl-avx512-freq MHZ    Expected AVX512 P0n frequency\n"
+        "  --dcl-tolerance PCT      Allowed deviation percentage (default 3.0)\n"
+        "  --enable-msr-freq        Use MSR APERF/MPERF for frequency measurement\n"
+        "  --enable-rapl            Enable RAPL power monitoring\n"
+        "  --base-freq MHZ          Base frequency for APERF/MPERF calc (default 2000)\n"
+        "\n"
         "Misc:\n"
         "  --check                  Validate config but do not run workload\n"
         "  --help                   Show this help\n",
@@ -724,7 +1056,9 @@ int parse_args(
     char **out_freq_table,
     int *out_dynamic_freq,
     char **out_mixed_ratio,
-    int *out_single_core_id, int *out_single_core_threads)
+    int *out_single_core_id, int *out_single_core_threads,
+    dcl_spec_t *out_dcl, int *out_enable_msr_freq, int *out_enable_rapl, 
+    double *out_base_freq_mhz)
 {
     *out_mode = NULL;
     *out_util = -1;
@@ -750,6 +1084,13 @@ int parse_args(
     
     *out_single_core_id = 0;
     *out_single_core_threads = 2;
+    
+    /* DCL validation defaults */
+    memset(out_dcl, 0, sizeof(*out_dcl));
+    out_dcl->tolerance_pct = 3.0;
+    *out_enable_msr_freq = 0;
+    *out_enable_rapl = 0;
+    *out_base_freq_mhz = 2000.0;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--mode") == 0 && i + 1 < argc) {
@@ -851,6 +1192,56 @@ int parse_args(
         
         if (strcmp(argv[i], "--single-core-threads") == 0 && i + 1 < argc) {
             *out_single_core_threads = atoi(argv[++i]);
+            continue;
+        }
+        
+        /* DCL validation options */
+        if (strcmp(argv[i], "--validate-dcl") == 0) {
+            out_dcl->enabled = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--dcl-sse-freq") == 0 && i + 1 < argc) {
+            out_dcl->sse_p0n_mhz = atof(argv[++i]);
+            out_dcl->enabled = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--dcl-avx-freq") == 0 && i + 1 < argc) {
+            out_dcl->avx_p0n_mhz = atof(argv[++i]);
+            out_dcl->enabled = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--dcl-avx2-freq") == 0 && i + 1 < argc) {
+            out_dcl->avx2_p0n_mhz = atof(argv[++i]);
+            out_dcl->enabled = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--dcl-avx512-freq") == 0 && i + 1 < argc) {
+            out_dcl->avx512_p0n_mhz = atof(argv[++i]);
+            out_dcl->enabled = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--dcl-tolerance") == 0 && i + 1 < argc) {
+            out_dcl->tolerance_pct = atof(argv[++i]);
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--enable-msr-freq") == 0) {
+            *out_enable_msr_freq = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--enable-rapl") == 0) {
+            *out_enable_rapl = 1;
+            continue;
+        }
+        
+        if (strcmp(argv[i], "--base-freq") == 0 && i + 1 < argc) {
+            *out_base_freq_mhz = atof(argv[++i]);
             continue;
         }
 
@@ -1984,6 +2375,12 @@ int main(int argc, char **argv)
     char *mixed_ratio_str = NULL;
     int single_core_id = 0;
     int single_core_threads = 2;
+    
+    /* DCL validation parameters */
+    dcl_spec_t dcl_spec;
+    int enable_msr_freq = 0;
+    int enable_rapl = 0;
+    double base_freq_mhz = 2000.0;
 
     /* Parse CLI */
     if (parse_args(
@@ -1997,7 +2394,8 @@ int main(int argc, char **argv)
             &freq_table_str,
             &dynamic_freq,
             &mixed_ratio_str,
-            &single_core_id, &single_core_threads) != 0)
+            &single_core_id, &single_core_threads,
+            &dcl_spec, &enable_msr_freq, &enable_rapl, &base_freq_mhz) != 0)
     {
         return 1;
     }
@@ -2214,7 +2612,7 @@ if (validate_environment(
             );
 
     /***************************************************************
-     * Write results to central CSV file
+     * Post-Run Analysis & Validation
      ***************************************************************/
     if (rc == 0 && wargs) {
         /* Calculate statistics from completed run */
@@ -2261,6 +2659,33 @@ if (validate_environment(
             
             printf("\n⚠ Using final snapshot (CSV log not available or invalid)\n");
         }
+        
+        /***************************************************************
+         * Cdyn Class Analysis
+         ***************************************************************/
+        cdyn_class_t cdyn = get_cdyn_class(type);
+        printf("\n=== Cdyn Class Analysis ===\n");
+        printf("  Workload Type: %s\n", 
+            (type == W_INT) ? "INT" :
+            (type == W_FLOAT) ? "FLOAT" :
+            (type == W_SSE) ? "SSE" :
+            (type == W_AVX) ? "AVX" :
+            (type == W_AVX2) ? "AVX2" :
+            (type == W_AVX512) ? "AVX512" :
+            (type == W_MIXED) ? "MIXED" : "AUTO");
+        printf("  Cdyn Class   : %s\n", cdyn_class_name(cdyn));
+        printf("===========================\n");
+        
+        /***************************************************************
+         * DCL Frequency Validation
+         ***************************************************************/
+        if (dcl_spec.enabled && final_freq_mhz > 0) {
+            validate_frequency(&dcl_spec, type, final_freq_mhz);
+        }
+        
+        /***************************************************************
+         * Write results to central CSV file
+         ***************************************************************/
         
         write_results_csv(
             mode,

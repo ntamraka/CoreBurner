@@ -4,6 +4,12 @@ log/
 # Results CSV file
 results.csv
 
+# All CSV log files
+*.csv
+
+# All summary text files
+*.summary.txt
+
 # Compiled binary
 coreburner
 cpu_id

@@ -1,10 +1,23 @@
 
 
           
-# **CoreBurner — Advanced Linux CPU Stress, Telemetry & CPUFreq Control Tool**
+# **CoreBurner — Advanced Linux CPU Stress, Telemetry & Frequency Validation Tool**
 
-CoreBurner is a high-precision Linux workload generator built for **benchmarking**, **thermal testing**, **frequency scaling analysis**, and **CPU stability validation**.  
-It includes advanced workloads (INT / FLOAT / AVX / MIXED), full thread pinning, detailed telemetry, and **active CPUFreq manipulation** (governor + per-core frequency tuning).
+CoreBurner is a high-precision Linux workload generator built for **benchmarking**, **thermal testing**, **frequency scaling analysis**, **CPU stability validation**, and **DCL frequency validation**.  
+It includes advanced workloads (INT / FLOAT / AVX / MIXED), full thread pinning, detailed telemetry, **active CPUFreq manipulation** (governor + per-core frequency tuning), and **comprehensive DCL/CWF frequency validation** for Intel processors.
+
+## 🆕 NEW: DCL Frequency Validation
+
+CoreBurner now supports comprehensive **Data Center List (DCL) frequency validation** for Intel CWF (Custom Workload Frequency) and other custom SKUs. This addresses the industry need for validating CPU frequencies against specifications, with built-in Cdyn class detection and automated pass/fail reporting.
+
+**See [DCL_VALIDATION.md](DCL_VALIDATION.md) for complete documentation.**
+
+### Quick Example:
+```bash
+# Validate AVX2 P0n frequency against DCL specification
+./coreburner --mode multi --util 100 --duration 60s --type AVX2 \
+  --dcl-avx2-freq 2800 --dcl-tolerance 3.0 --log avx2_validation.csv
+```
 
 ---
 
