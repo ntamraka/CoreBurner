@@ -18,17 +18,17 @@ echo ""
 # 2. Check what CoreBurner was compiled with
 echo "2. CoreBurner Compile-time Detection:"
 echo "   ----------------------------------------"
-./coreburner --check-simd 2>&1 | grep -A 10 "Compile-time Flags"
+../coreburner --check-simd 2>&1 | grep -A 10 "Compile-time Flags"
 echo ""
 
 # 3. Check binary for SIMD instructions
 echo "3. Binary Instruction Analysis:"
 echo "   ----------------------------------------"
 
-SSE_COUNT=$(objdump -d coreburner | grep -c 'xmm' || true)
-AVX_YMM_COUNT=$(objdump -d coreburner | grep -c 'ymm' || true)
-AVX512_ZMM_COUNT=$(objdump -d coreburner | grep -c 'zmm' || true)
-FMA_COUNT=$(objdump -d coreburner | grep -c 'vfmadd' || true)
+SSE_COUNT=$(objdump -d ../coreburner | grep -c 'xmm' || true)
+AVX_YMM_COUNT=$(objdump -d ../coreburner | grep -c 'ymm' || true)
+AVX512_ZMM_COUNT=$(objdump -d ../coreburner | grep -c 'zmm' || true)
+FMA_COUNT=$(objdump -d ../coreburner | grep -c 'vfmadd' || true)
 
 echo "   SSE instructions (xmm):        $SSE_COUNT occurrences"
 echo "   AVX/AVX2 instructions (ymm):   $AVX_YMM_COUNT occurrences"
@@ -41,15 +41,15 @@ echo "4. Work Unit Instructions (sample):"
 echo "   ----------------------------------------"
 
 echo "   AVX2 Work Unit:"
-objdump -d coreburner | grep -A 8 '<avx2_work_unit>:' | grep -E '(vmov|vfmadd|vbroadcast)' | head -5 | sed 's/^/   /'
+objdump -d ../coreburner | grep -A 8 '<avx2_work_unit>:' | grep -E '(vmov|vfmadd|vbroadcast)' | head -5 | sed 's/^/   /'
 
 echo ""
 echo "   AVX Work Unit:"
-objdump -d coreburner | grep -A 8 '<avx_work_unit>:' | grep -E '(vmul|vadd|vmov)' | head -5 | sed 's/^/   /'
+objdump -d ../coreburner | grep -A 8 '<avx_work_unit>:' | grep -E '(vmul|vadd|vmov)' | head -5 | sed 's/^/   /'
 
 echo ""
 echo "   SSE Work Unit:"
-objdump -d coreburner | grep -A 8 '<sse_work_unit>:' | grep -E '(mul|add|mov)' | head -5 | sed 's/^/   /'
+objdump -d ../coreburner | grep -A 8 '<sse_work_unit>:' | grep -E '(mul|add|mov)' | head -5 | sed 's/^/   /'
 
 echo ""
 
@@ -71,10 +71,10 @@ echo ""
 echo "6. To Profile at Runtime (requires perf):"
 echo "   ----------------------------------------"
 echo "   # Basic profiling:"
-echo "   sudo perf stat ./coreburner --mode multi --util 50 --duration 10 --type AVX2"
+echo "   sudo perf stat ../coreburner --mode multi --util 50 --duration 10 --type AVX2"
 echo ""
 echo "   # Detailed instruction profiling:"
-echo "   sudo perf record -e cycles,instructions ./coreburner --mode multi --util 50 --duration 10 --type AVX2"
+echo "   sudo perf record -e cycles,instructions ../coreburner --mode multi --util 50 --duration 10 --type AVX2"
 echo "   sudo perf report"
 echo ""
 echo "   # SIMD-specific events (Intel):"

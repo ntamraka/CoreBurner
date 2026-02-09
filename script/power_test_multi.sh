@@ -10,7 +10,7 @@ echo ""
 # Test different utilization levels with AVX2 (highest power)
 for util in 50 75 90 100; do
     echo "Testing AVX2 at ${util}% utilization..."
-    ./coreburner --mode multi --util $util --duration 15s --type AVX2 \
+    ../coreburner --mode multi --util $util --duration 15s --type AVX2 \
         --log power_avx2_${util}pct.csv 2>&1 | grep -A 10 "Aggregate Statistics"
     echo ""
     sleep 5  # Cool down between tests

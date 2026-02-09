@@ -106,7 +106,7 @@ Created comprehensive documentation:
 
 ### Automated Test Suite
 ```bash
-./validate_dcl_frequencies.sh
+./script/validate_dcl_frequencies.sh
 ```
 
 **Output:**

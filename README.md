@@ -10,7 +10,7 @@ It includes advanced workloads (INT / FLOAT / AVX / MIXED), full thread pinning,
 
 CoreBurner now supports comprehensive **Data Center List (DCL) frequency validation** for Intel CWF (Custom Workload Frequency) and other custom SKUs. This addresses the industry need for validating CPU frequencies against specifications, with built-in Cdyn class detection and automated pass/fail reporting.
 
-**See [DCL_VALIDATION.md](DCL_VALIDATION.md) for complete documentation.**
+**See [doc/DCL_VALIDATION.md](doc/DCL_VALIDATION.md) for complete documentation.**
 
 ### Quick Example:
 ```bash
@@ -159,7 +159,7 @@ sudo ./coreburner --mode multi --util 100 \
 ### Comprehensive Verification
 ```bash
 # Run verification script
-./verify_simd.sh
+./script/verify_simd.sh
 
 # Check CPU flags
 lscpu | grep -i flags

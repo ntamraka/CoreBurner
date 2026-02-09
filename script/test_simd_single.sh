@@ -40,9 +40,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Test 1/4: SSE (128-bit) workload"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ "$USE_TMC" == "yes" ]; then
-    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a SSE -i Run1 -c "./coreburner --mode single --util 100 --duration 2m --type SSE"
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a SSE -i Run1 -c "../coreburner --mode single --util 100 --duration 2m --type SSE"
 else
-    ./coreburner --mode single --util 100 --duration 2m --type SSE
+    ../coreburner --mode single --util 100 --duration 2m --type SSE
 fi
 echo ""
 
@@ -51,9 +51,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Test 2/4: AVX (256-bit) workload"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ "$USE_TMC" == "yes" ]; then
-    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX -i Run1 -c "./coreburner --mode single --util 100 --duration 2m --type AVX"
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX -i Run1 -c "../coreburner --mode single --util 100 --duration 2m --type AVX"
 else
-    ./coreburner --mode single --util 100 --duration 2m --type AVX
+    ../coreburner --mode single --util 100 --duration 2m --type AVX
 fi
 echo ""
 
@@ -62,9 +62,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Test 3/4: AVX2 (256-bit + FMA) workload"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ "$USE_TMC" == "yes" ]; then
-    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX2 -i Run1 -c "./coreburner --mode single --util 100 --duration 2m --type AVX2"
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX2 -i Run1 -c "../coreburner --mode single --util 100 --duration 2m --type AVX2"
 else
-    ./coreburner --mode single --util 100 --duration 2m --type AVX2
+    ../coreburner --mode single --util 100 --duration 2m --type AVX2
 fi
 echo ""
 
@@ -73,9 +73,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Test 4/4: AVX-512 (512-bit) workload"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ "$USE_TMC" == "yes" ]; then
-    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX512 -i Run1 -c "./coreburner --mode single --util 100 --duration 2m --type AVX512"
+    python3 /root/tmc/tmc.py -Z metrics2 -u -n -x ntamraka -d /root/tmc/coreburner -G coreburner -a AVX512 -i Run1 -c "../coreburner --mode single --util 100 --duration 2m --type AVX512"
 else
-    ./coreburner --mode single --util 100 --duration 2m --type AVX512
+    ../coreburner --mode single --util 100 --duration 2m --type AVX512
 fi
 echo ""
 

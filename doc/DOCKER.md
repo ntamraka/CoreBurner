@@ -336,7 +336,7 @@ docker system prune -a
 ## Support
 
 For more information:
-- See [README.md](README.md) for CoreBurner usage
+- See [README.md](../README.md) for CoreBurner usage
 - See [DCL_VALIDATION.md](DCL_VALIDATION.md) for frequency validation
 - See [QUICK_START.md](QUICK_START.md) for basic examples
 

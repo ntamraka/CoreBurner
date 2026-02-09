@@ -50,7 +50,7 @@ Run automated tests across all workload types:
 
 ```bash
 # 1. Edit the script to set your DCL specifications
-nano validate_dcl_frequencies.sh
+nano script/validate_dcl_frequencies.sh
 
 # Update these lines:
 #   DCL_SSE_P0N=3200
@@ -58,7 +58,7 @@ nano validate_dcl_frequencies.sh
 #   DCL_AVX2_P0N=2800
 
 # 2. Run the validation suite
-sudo ./validate_dcl_frequencies.sh
+sudo ./script/validate_dcl_frequencies.sh
 
 # 3. Check results
 # Results will be in: ./dcl_validation_TIMESTAMP/

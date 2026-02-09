@@ -41,9 +41,9 @@ ALLCORE_DURATION=120
 # SCRIPT CONFIGURATION
 # ============================================================================
 
-COREBURNER="./coreburner"
+COREBURNER="../coreburner"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-LOG_DIR="./dcl_validation_${TIMESTAMP}"
+LOG_DIR="../dcl_validation_${TIMESTAMP}"
 REPORT_FILE="${LOG_DIR}/validation_report.txt"
 
 # Colors for output

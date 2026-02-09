@@ -16,7 +16,7 @@ This shows:
 
 ### 2. Run Automated Verification
 ```bash
-./verify_simd.sh
+./script/verify_simd.sh
 ```
 
 This script:
@@ -210,7 +210,7 @@ likwid-perfctr -C 0-3 -g FLOPS_AVX ./coreburner --mode multi --util 50 --duratio
 **Easiest verification:**
 ```bash
 ./coreburner --check-simd
-./verify_simd.sh
+./script/verify_simd.sh
 ```
 
 **Most detailed verification:**

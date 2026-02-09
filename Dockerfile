@@ -37,8 +37,10 @@ WORKDIR /app
 COPY --from=builder /build/coreburner /app/coreburner
 
 # Copy scripts and documentation
-COPY *.sh *.md ./
-RUN chmod +x *.sh coreburner
+COPY script/ /app/script/
+COPY doc/ /app/doc/
+COPY *.md ./
+RUN chmod +x /app/script/*.sh coreburner
 
 # Create log directory
 RUN mkdir -p /app/log && chown -R coreburner:coreburner /app

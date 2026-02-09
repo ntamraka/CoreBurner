@@ -11,7 +11,7 @@
 # =========================================================
 
 set -euo pipefail
-BIN="./coreburner"
+BIN="../coreburner"
 LOGDIR="test_results"
 SUMMARY_CSV="${LOGDIR}/summary.csv"
 TEMP_LIMIT=80   # safety default for dynamic-freq test

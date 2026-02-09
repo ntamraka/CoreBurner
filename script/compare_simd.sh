@@ -16,22 +16,22 @@ echo ""
 
 # Test SSE
 echo "[1/4] Testing SSE (128-bit)..."
-./coreburner --mode $MODE --util $UTIL --duration $DURATION --type SSE --log sse_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
+../coreburner --mode $MODE --util $UTIL --duration $DURATION --type SSE --log sse_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
 echo ""
 
 # Test AVX
 echo "[2/4] Testing AVX (256-bit FP)..."
-./coreburner --mode $MODE --util $UTIL --duration $DURATION --type AVX --log avx_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
+../coreburner --mode $MODE --util $UTIL --duration $DURATION --type AVX --log avx_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
 echo ""
 
 # Test AVX2
 echo "[3/4] Testing AVX2 (256-bit FP+INT+FMA)..."
-./coreburner --mode $MODE --util $UTIL --duration $DURATION --type AVX2 --log avx2_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
+../coreburner --mode $MODE --util $UTIL --duration $DURATION --type AVX2 --log avx2_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
 echo ""
 
 # Test INT for baseline
 echo "[4/4] Testing INT (baseline)..."
-./coreburner --mode $MODE --util $UTIL --duration $DURATION --type INT --log int_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
+../coreburner --mode $MODE --util $UTIL --duration $DURATION --type INT --log int_multi.csv 2>&1 | grep -A 15 "Aggregate Statistics"
 echo ""
 
 echo "========================================"

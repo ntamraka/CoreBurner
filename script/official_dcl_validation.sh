@@ -43,7 +43,7 @@ TEST_DURATION=60          # 60 seconds per test
 
 # Create timestamped log directory
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-LOG_DIR="./dcl_validation_${TIMESTAMP}"
+LOG_DIR="../dcl_validation_${TIMESTAMP}"
 mkdir -p "$LOG_DIR"
 
 # Log file
@@ -74,7 +74,7 @@ check_prerequisites() {
     print_section "Checking Prerequisites"
     
     # Check if coreburner exists
-    if [ ! -f "./coreburner" ]; then
+    if [ ! -f "../coreburner" ]; then
         echo -e "${RED}✗ CoreBurner binary not found!${NC}"
         echo "  Please compile CoreBurner first: make"
         exit 1
