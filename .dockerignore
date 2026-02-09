@@ -1,0 +1,34 @@
+# Git files
+.git
+.gitignore
+
+# Log directory
+log/
+
+# Results and CSV files
+results.csv
+*.csv
+*.summary.txt
+dcl_validation_*/
+
+# Object files
+*.o
+*.a
+
+# Test results
+test_results/
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Docker files (except the binary we need)
+Dockerfile.simple
+docker-compose.yml

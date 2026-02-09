@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  coreburner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: coreburner:latest
+    container_name: coreburner
+    
+    # Required for CPU stress testing and frequency control
+    privileged: true
+    
+    # Mount host CPU information
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - ./log:/app/log
+      - ./results:/app/results
+    
+    # Use host network for better performance monitoring
+    network_mode: host
+    
+    # Allow all CPUs to be used
+    cpuset: "0-$(nproc --all)"
+    
+    # Resource limits (optional - remove for unrestricted testing)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '4'
+    #       memory: 2G
+    
+    # Example command - override as needed
+    command: ["--mode", "multi", "--util", "75", "--duration", "60s", "--type", "AVX2", "--log", "/app/log/stress_test.csv"]
+    
+    # Automatically remove container after it exits
+    restart: "no"
+
+  # Alternative service for interactive use
+  coreburner-interactive:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: coreburner:latest
+    container_name: coreburner-interactive
+    privileged: true
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - ./log:/app/log
+      - ./results:/app/results
+    network_mode: host
+    # Override entrypoint for shell access
+    entrypoint: ["/bin/bash"]
+    command: ["-c", "while true; do sleep 1000; done"]
+    restart: "no"
+    profiles:
+      - interactive
+
+  # Service for governor/frequency control (requires root)
+  coreburner-root:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: coreburner:latest
+    container_name: coreburner-root
+    privileged: true
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys
+      - ./log:/app/log
+      - ./results:/app/results
+    network_mode: host
+    # Example with frequency control
+    command: [
+      "--mode", "multi",
+      "--util", "100",
+      "--duration", "2m",
+      "--type", "AVX2",
+      "--set-governor", "performance",
+      "--temp-threshold", "85",
+      "--log", "/app/log/stress_root.csv"
+    ]
+    restart: "no"
+    profiles:
+      - root
