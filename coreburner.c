@@ -700,13 +700,13 @@ void avx2_work_unit(float *buf) {
     for (size_t i = 0; i < SIMD_ARRAY_SIZE; i += 8) {
         __m256 a = _mm256_loadu_ps(buf + i);
         
-        /* IDENTICAL operations as SSE/AVX but using FMA where applicable */
+        /* Use FMA instructions heavily (AVX2's main advantage over AVX) */
         for (int j = 0; j < SIMD_INNER_ITERATIONS; ++j) {
-            a = _mm256_add_ps(a, b);                           /* 1. add */
-            a = _mm256_mul_ps(a, c);                           /* 2. mul */
-            a = _mm256_div_ps(a, _mm256_add_ps(d, b));        /* 3. div */
-            a = _mm256_sqrt_ps(_mm256_mul_ps(a, a));          /* 4. sqrt */
-            a = _mm256_sub_ps(a, _mm256_mul_ps(b, c));        /* 5. sub */
+            a = _mm256_fmadd_ps(a, c, b);                      /* 1. FMA: a = a*c + b */
+            a = _mm256_fmadd_ps(a, b, c);                      /* 2. FMA: a = a*b + c */
+            a = _mm256_fmsub_ps(a, d, c);                      /* 3. FMS: a = a*d - c */
+            a = _mm256_fmadd_ps(a, c, b);                      /* 4. FMA: a = a*c + b */
+            a = _mm256_fmsub_ps(a, b, d);                      /* 5. FMS: a = a*b - d */
         }
         
         _mm256_storeu_ps(buf + i, a);

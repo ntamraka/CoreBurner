@@ -27,6 +27,7 @@ echo ""
 
 # Rebuild with new workloads
 echo "Building coreburner with enhanced workloads..."
+cd ..
 make clean > /dev/null 2>&1
 make
 if [ $? -ne 0 ]; then
@@ -35,6 +36,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "✓ Build successful"
 echo ""
+cd script
 
 # Get CPU count
 NCPU=$(nproc)
